@@ -5,7 +5,7 @@ import useMovieContainer from './MoviesContainer';
 
 export const MoviesMainView: React.FC = () => {
   const {
-    movies, // Thay đổi từ listPopularFilm thành movies để phù hợp với logic mới
+    movies, 
     loading,
     keyword,
     setKeyword,
@@ -27,7 +27,7 @@ export const MoviesMainView: React.FC = () => {
               placeholder="Enter keyword" 
               name="keyword" 
               value={keyword} 
-              onChange={(e) => setKeyword(e.target.value)} // Cập nhật từ khóa
+              onChange={(e) => setKeyword(e.target.value)}
               className="outline-none border-none rounded-full px-6 py-2 bg-black placeholder-gray-500 text-white flex-1 md:flex-auto md:w-96"
             />
             <button type="submit" className="btn-primary py-2 px-8 text-white rounded-full">Search</button>
@@ -35,7 +35,7 @@ export const MoviesMainView: React.FC = () => {
 
           {/* Danh sách phim */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-16">
-            {movies.map((movie) => ( // Thay đổi từ listPopularFilm thành movies
+            {movies.map((movie) => ( 
               <FilmItem
                 key={movie.id} 
                 id={movie.id}

@@ -70,7 +70,7 @@ const useTVSeriesContainer = () => {
   };
 
   return {
-    tvSeries: isSearching ? searchResults : listPopularTV, // Unified list
+    tvSeries: isSearching ? searchResults : listPopularTV, 
     loading,
     error,
     keyword,

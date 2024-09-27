@@ -4,13 +4,13 @@ import { Movie } from '../../Types/Types';
 import apiClient from '../../services/apiServices/apiServices';
 
 const useMovieContainer = () => {
-  const [listPopularFilm, setListPopularFilm] = useState<Movie[]>([]); // Danh sách phim phổ biến
-  const [searchResults, setSearchResults] = useState<Movie[]>([]); // Danh sách phim tìm kiếm
+  const [listPopularFilm, setListPopularFilm] = useState<Movie[]>([]); 
+  const [searchResults, setSearchResults] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [keyword, setKeyword] = useState<string>(''); // Quản lý từ khóa tìm kiếm
-  const [isSearching, setIsSearching] = useState<boolean>(false); // Để biết khi nào người dùng đang tìm kiếm
+  const [keyword, setKeyword] = useState<string>(''); 
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   // Hàm fetch phim phổ biến
   const fetchPopularFilm = async (page: number = 1) => {
@@ -28,7 +28,7 @@ const useMovieContainer = () => {
 
   // Hàm fetch phim theo từ khóa
   const fetchMoviesByKeyword = async (page: number = 1) => {
-    if (!keyword.trim()) return; // Nếu từ khóa rỗng, không làm gì cả
+    if (!keyword.trim()) return; 
     try {
       setLoading(true);
       const response = await apiClient.get(`search/movie?query=${keyword}&include_adult=false&language=en-US&page=${page}`);
@@ -38,7 +38,7 @@ const useMovieContainer = () => {
       console.error(err);
     } finally {
       setLoading(false);
-      setIsSearching(true); // Đánh dấu là đang trong trạng thái tìm kiếm
+      setIsSearching(true);
     }
   };
 

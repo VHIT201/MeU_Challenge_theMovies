@@ -1,56 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { FilmDetails, Video, SimilarFilm, Credits } from "../../Types/Types"; // Đảm bảo bạn đã định nghĩa các kiểu dữ liệu này
-import apiClient from "../../services/apiServices/apiServices"; // Đảm bảo đây là import đúng cho client API của bạn
+import { FilmDetails, Video, SimilarFilm, Credits } from "../../Types/Types";
+import useMovieDetailContainer from "./MovieDetailContainer"; // Import custom hook
 import Config from "../../configuration";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import FilmItem from "../../components/FilmItem";
+
 const MovieDetailMainView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [filmDetails, setFilmDetails] = useState<FilmDetails | null>(null);
-  const [videos, setVideos] = useState<Video[]>([]);
-  const [similarFilms, setSimilarFilms] = useState<SimilarFilm[]>([]);
-  const [credits, setCredits] = useState<Credits | null>(null); // State for credits
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  
+  // Kiểm tra nếu id là undefined
+  if (!id) {
+    return <div>Không có thông tin phim.</div>;
+  }
 
-  useEffect(() => {
-    const fetchFilmDetails = async () => {
-      try {
-        const response = await apiClient.get(`movie/${id}?language=en-US`);
-        setFilmDetails(response.data);
+  // Sử dụng hook để lấy chi tiết phim
+  const {
+    filmDetails,
+    videos,
+    similarFilms,
+    credits,
+    loading,
+    error,
+  } = useMovieDetailContainer(id);
 
-        // Fetch videos
-        const videoResponse = await apiClient.get(
-          `movie/${id}/videos?language=en-US`
-        );
-        setVideos(videoResponse.data.results);
-        // console.log("Videos:", videoResponse.data.results);
-
-        // Fetch similar films
-        const similarResponse = await apiClient.get(
-          `movie/${id}/similar?language=en-US&page=1`
-        );
-        setSimilarFilms(similarResponse.data.results);
-        console.log("Similar Films:", similarResponse.data.results);
-
-        // Fetch credits
-        const creditsResponse = await apiClient.get(
-          `movie/${id}/credits?language=en-US`
-        );
-        setCredits(creditsResponse.data);
-        // console.log("Credits:", creditsResponse.data); // Log credits
-      } catch (err) {
-        setError("Failed to fetch film details");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFilmDetails();
-  }, [id]);
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -64,7 +38,7 @@ const MovieDetailMainView: React.FC = () => {
   }
 
   return (
-    <main className="w-full flex flex-col items-center justify-start bg-black ">
+    <main className="w-full flex flex-col items-center justify-start bg-black">
       <div
         className='relative w-full px-4 md:px-8 lg:px-16 py-12 md:pt-32 md:pb-20 bg-center bg-no-repeat bg-cover z-0 before:content-[""] before:absolute before:bottom-0 before:left-0 before:right-0 before:h-1/2 before:bg-black-main before:-z-10 after:content-[""] after:absolute after:top-0 after:left-0 after:right-0 after:h-1/2 after:bg-gradient-to-t after:from-black-main after:to-transparent after:-z-10'
         style={{
@@ -79,7 +53,7 @@ const MovieDetailMainView: React.FC = () => {
               className="w-full rounded-3xl"
             />
           </div>
-          <div className="px-4 flex-1 flex flex-col items-start justify-between -my-2 lg:-my-4 ">
+          <div className="px-4 flex-1 flex flex-col items-start justify-between -my-2 lg:-my-4">
             <h2 className="py-2 lg:py-4 font-bold text-white text-3xl md:text-5xl lg:text-7xl">
               {filmDetails.title}
             </h2>
@@ -140,7 +114,7 @@ const MovieDetailMainView: React.FC = () => {
           Similar Movies
         </h3>
 
-        <div className="flex flex-wrap -mx-2 ">
+        <div className="flex flex-wrap -mx-2">
           <Swiper
             modules={[Autoplay, Pagination, Navigation]}
             spaceBetween={20}

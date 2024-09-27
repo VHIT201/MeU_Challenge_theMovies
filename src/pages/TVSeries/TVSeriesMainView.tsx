@@ -4,7 +4,7 @@ import useTVSeriesContainer from './TVSeriesContainer';
 
 const TVSeriesMainView: React.FC = () => {
   const {
-    tvSeries, // Updated from listPopularTV to tvSeries
+    tvSeries, 
     loading,
     keyword,
     setKeyword,

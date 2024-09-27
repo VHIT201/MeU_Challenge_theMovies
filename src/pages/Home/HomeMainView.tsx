@@ -4,17 +4,17 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import FilmSlide from "../../components/FilmSlide";
 import FilmItem from "../../components/FilmItem";
 import { slides } from "../../data/filmData";
-import useHomeContainer from "./homeContainer"; // Import hook mới
+import useHomeContainer from "./homeContainer"; 
 
 const HomeMainView: React.FC = () => {
   const { swipersData, loading, error } = useHomeContainer();
 
   if (loading) {
-    return <div>Loading...</div>; // Hiển thị thông báo khi đang tải
+    return <div>Loading...</div>; 
   }
 
   if (error) {
-    return <div>{error}</div>; // Hiển thị thông báo lỗi
+    return <div>{error}</div>; 
   }
 
   return (
