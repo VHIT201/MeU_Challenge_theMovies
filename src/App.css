@@ -1241,3 +1241,18 @@ button.swiper-pagination-bullet {
   color: rgb(255 0 0 / var(--tw-text-opacity))
 }
 
+.spinner {
+  border: 8px solid rgba(0, 0, 0, 0.1); /* Light border */
+  border-left: 8px solid #3498db; /* Blue border */
+  border-right: 8px solid #e74c3c; /* Red border */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s cubic-bezier(0.5, 0.1, 0.5, 1) infinite;
+  box-shadow: 0px 0px 15px rgba(52, 152, 219, 0.6); /* Soft glow effect */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

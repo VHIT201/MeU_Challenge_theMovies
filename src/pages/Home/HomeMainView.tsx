@@ -14,12 +14,12 @@ const HomeMainView: React.FC = () => {
   }
 
   if (error) {
-    return <div>{error}</div>; 
+    return <div>Error occurred</div>; 
   }
 
   return (
-    <main className="w-full flex flex-col items-center justify-start ">
-      {/* header swiper */}
+    <main className="w-full flex flex-col items-center justify-start">
+      {/* Header Swiper */}
       <Swiper
         loop={true}
         autoplay={{ delay: 3000, disableOnInteraction: true }}
@@ -38,7 +38,7 @@ const HomeMainView: React.FC = () => {
         ))}
       </Swiper>
 
-      {/* Render các Swiper từ swipersData */}
+      {/* Render swipers for movies and TV shows */}
       {swipersData.map((swiper, index) => (
         <div key={index} className="bg-black-main w-full px-10 md:px-8 py-6 md:py-0">
           <div className="max-w-screen-2xl mx-auto mb-8">

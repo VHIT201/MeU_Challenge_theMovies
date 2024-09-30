@@ -1,85 +1,92 @@
-// MovieContainer.ts
-import { useState, useEffect } from 'react';
-import { Movie } from '../../Types/Types';
+import { useState } from 'react';
 import apiClient from '../../services/apiServices/apiServices';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 const useMovieContainer = () => {
-  const [listPopularFilm, setListPopularFilm] = useState<Movie[]>([]); 
-  const [searchResults, setSearchResults] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [keyword, setKeyword] = useState<string>(''); 
-  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>(''); // Từ khóa đã được xác nhận khi bấm search
 
   // Hàm fetch phim phổ biến
-  const fetchPopularFilm = async (page: number = 1) => {
-    try {
-      setLoading(true);
-      const response = await apiClient.get(`movie/popular?language=en-US&page=${page}`);
-      setListPopularFilm((prevMovies) => [...prevMovies, ...response.data.results]);
-    } catch (err) {
-      setError("Failed to fetch popular movies");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+  const fetchPopularFilm = async ({ pageParam = 1 }) => {
+    const response = await apiClient.get(`movie/popular?language=en-US&page=${pageParam}`);
+    return {
+      results: response.data.results,
+      nextPage: response.data.page < response.data.total_pages ? response.data.page + 1 : undefined,
+    };
   };
 
-  // Hàm fetch phim theo từ khóa
-  const fetchMoviesByKeyword = async (page: number = 1) => {
-    if (!keyword.trim()) return; 
-    try {
-      setLoading(true);
-      const response = await apiClient.get(`search/movie?query=${keyword}&include_adult=false&language=en-US&page=${page}`);
-      setSearchResults((prevMovies) => (page === 1 ? response.data.results : [...prevMovies, ...response.data.results]));
-    } catch (err) {
-      setError("Failed to search movies");
-      console.error(err);
-    } finally {
-      setLoading(false);
-      setIsSearching(true);
-    }
+  const {
+    data: popularMoviesData,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['popularMovies'],
+    queryFn: fetchPopularFilm,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 1,
+    enabled: searchTerm === '', // Chỉ gọi khi từ khóa tìm kiếm trống
+  });
+
+  const movies = popularMoviesData?.pages.flatMap(page => page.results) || [];
+
+  // Hàm tìm kiếm phim theo từ khóa
+  const fetchMoviesByKeyword = async ({ pageParam = 1 }) => {
+    const response = await apiClient.get(`search/movie?query=${searchTerm}&include_adult=false&language=en-US&page=${pageParam}`);
+    return {
+      results: response.data.results,
+      nextPage: response.data.page < response.data.total_pages ? response.data.page + 1 : undefined,
+    };
   };
 
-  // Chỉ gọi API phim phổ biến khi lần đầu vào trang
-  useEffect(() => {
-    fetchPopularFilm(1);
-  }, []);
+  const {
+    data: searchResultsData,
+    fetchNextPage: fetchNextPageSearch,
+    hasNextPage: hasNextPageSearch,
+    refetch: refetchSearch,
+  } = useInfiniteQuery({
+    queryKey: ['searchMovies', searchTerm],
+    queryFn: fetchMoviesByKeyword,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    enabled: searchTerm.trim() !== '', // Chỉ gọi khi từ khóa tìm kiếm không trống
+    initialPageParam: 1,
+  });
 
-  // Khi từ khóa trống, quay lại trạng thái không tìm kiếm và hiển thị phim phổ biến
-  useEffect(() => {
-    if (keyword.trim() === '') {
-      setIsSearching(false);
-      setSearchResults([]); // Clear danh sách tìm kiếm
-    }
-  }, [keyword]);
+  const searchResults = searchResultsData?.pages.flatMap(page => page.results) || [];
+
+  // Nếu từ khóa trống, hiển thị phim phổ biến; nếu không, hiển thị kết quả tìm kiếm
+  const moviesToDisplay = searchTerm.trim() ? searchResults : movies;
 
   const handleLoadMore = () => {
-    if (isSearching) {
-      fetchMoviesByKeyword(currentPage + 1); // Load thêm kết quả tìm kiếm
+    if (searchTerm.trim()) {
+      fetchNextPageSearch(); // Tải thêm kết quả tìm kiếm
     } else {
-      setCurrentPage((prevPage) => prevPage + 1);
-      fetchPopularFilm(currentPage + 1); // Load thêm phim phổ biến
+      fetchNextPage(); // Tải thêm phim phổ biến
     }
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault(); // Ngăn chặn load lại trang
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSearchTerm(keyword); // Cập nhật từ khóa tìm kiếm khi bấm nút Search
     if (keyword.trim()) {
-      setCurrentPage(1); // Đặt lại trang về 1 khi tìm kiếm mới
-      fetchMoviesByKeyword(); // Tìm kiếm phim với từ khóa
+      refetchSearch(); // Tìm kiếm theo từ khóa
     }
+  };
+
+  const resetSearch = () => {
+    setSearchTerm(''); // Xóa từ khóa tìm kiếm, quay về phim phổ biến
   };
 
   return {
-    movies: isSearching ? searchResults : listPopularFilm, // Hiển thị danh sách phù hợp
-    loading,
-    error,
+    movies: moviesToDisplay,
+    loading: isFetching || isFetchingNextPage,
     keyword,
     setKeyword,
     handleLoadMore,
     handleSearch,
+    resetSearch,
+    hasNextPage: searchTerm.trim() ? hasNextPageSearch : hasNextPage, // Kiểm tra có trang tiếp theo không
   };
 };
 

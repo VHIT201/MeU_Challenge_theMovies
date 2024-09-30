@@ -1,65 +1,52 @@
-import { useEffect, useState } from "react";
+import { useQuery } from '@tanstack/react-query';
 import apiClient from "../../services/apiServices/apiServices";
 import { Movie } from "../../Types/Types";
 
+interface SwiperData {
+  title: string;
+  data: Movie[];
+  viewMoreLink: string;
+}
+
 const useHomeContainer = () => {
-  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
-  const [topRatedMovies, setTopRatedMovies] = useState<Movie[]>([]);
-  const [trendingTV, setTrendingTV] = useState<Movie[]>([]);
-  const [topRatedTV, setTopRatedTV] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchTrendingMovies = async () => {
-    try {
+  // Fetching trending movies
+  const { data: trendingMovies = [], isLoading: isTrendingMoviesLoading, error: trendingMoviesError } = useQuery({
+    queryKey: ['trendingMovies'],
+    queryFn: async () => {
       const response = await apiClient.get("/trending/all/day?language=en-US");
-      setTrendingMovies(response.data.results);
-    } catch (err) {
-      setError("Failed to fetch trending movies");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return response.data.results;
+    },
+  });
 
-  const fetchTopRatedMovies = async () => {
-    try {
+  // Fetching top-rated movies
+  const { data: topRatedMovies = [], isLoading: isTopRatedMoviesLoading, error: topRatedMoviesError } = useQuery({
+    queryKey: ['topRatedMovies'],
+    queryFn: async () => {
       const response = await apiClient.get("/movie/top_rated?language=en-US&page=1");
-      setTopRatedMovies(response.data.results);
-    } catch (err) {
-      setError("Failed to fetch top-rated movies");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return response.data.results;
+    },
+  });
 
-  const fetchTrendingTV = async () => {
-    try {
+  // Fetching trending TV shows
+  const { data: trendingTV = [], isLoading: isTrendingTVLoading, error: trendingTVError } = useQuery({
+    queryKey: ['trendingTV'],
+    queryFn: async () => {
       const response = await apiClient.get("/trending/tv/day?language=en-US");
-      setTrendingTV(response.data.results);
-    } catch (err) {
-      setError("Failed to fetch trending TV shows");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return response.data.results;
+    },
+  });
 
-  const fetchTopRatedTV = async () => {
-    try {
+  // Fetching top-rated TV shows
+  const { data: topRatedTV = [], isLoading: isTopRatedTVLoading, error: topRatedTVError } = useQuery({
+    queryKey: ['topRatedTV'],
+    queryFn: async () => {
       const response = await apiClient.get("/tv/top_rated?language=en-US&page=1");
-      setTopRatedTV(response.data.results);
-    } catch (err) {
-      setError("Failed to fetch top-rated TV shows");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return response.data.results;
+    },
+  });
 
-  // Mảng chứa các thông tin Swiper
-  const swipersData = [
+  // Combine all swipers' data
+  const swipersData: SwiperData[] = [
     {
       title: "Trending Movies",
       data: trendingMovies,
@@ -82,12 +69,9 @@ const useHomeContainer = () => {
     },
   ];
 
-  useEffect(() => {
-    fetchTrendingMovies();
-    fetchTopRatedMovies();
-    fetchTrendingTV();
-    fetchTopRatedTV();
-  }, []);
+  // Check if any query is loading or has errors
+  const loading = isTrendingMoviesLoading || isTopRatedMoviesLoading || isTrendingTVLoading || isTopRatedTVLoading;
+  const error = trendingMoviesError || topRatedMoviesError || trendingTVError || topRatedTVError;
 
   return {
     swipersData,

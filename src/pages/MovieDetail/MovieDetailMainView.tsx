@@ -9,24 +9,22 @@ import FilmItem from "../../components/FilmItem";
 
 const MovieDetailMainView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  
+
   // Kiểm tra nếu id là undefined
   if (!id) {
     return <div>Không có thông tin phim.</div>;
   }
 
   // Sử dụng hook để lấy chi tiết phim
-  const {
-    filmDetails,
-    videos,
-    similarFilms,
-    credits,
-    loading,
-    error,
-  } = useMovieDetailContainer(id);
+  const { filmDetails, videos, similarFilms, credits, loading, error } =
+    useMovieDetailContainer(id);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="spinner"></div>
+      </div>
+    );
   }
 
   if (error) {
@@ -90,8 +88,12 @@ const MovieDetailMainView: React.FC = () => {
         </div>
       </div>
 
-      <div className='relative px-4 md:px-8 lg:px-16 w-full text-left z-0 before:content-[""] before:absolute before:top-0 before:left-0 before:right-0 before:h-1/2 before:bg-black-main before:-z-10 after:content-[""] after:absolute after:top-0 after:left-0 after:right-0 after:h-1/2 after:bg-gradient-to-t after:from-black-main after:to-transparent after:-z-10'>
-        {videos.length > 0 &&
+      <div
+        className='relative px-4 md:px-8 lg:px-16 w-full text-left z-0 
+  before:content-[""] before:absolute before:top-0 before:left-0 before:right-0 before:h-1/2 
+  before:bg-gradient-to-b before:from-black/50 before:to-black-main before:z-10'
+      >
+        {videos.length < 0 ? (
           videos.slice(0, 5).map((item) => (
             <div key={item.id} className="mb-16">
               <h3 className="text-white text-base md:text-2xl font-semibold mb-4">
@@ -106,7 +108,17 @@ const MovieDetailMainView: React.FC = () => {
                 allowFullScreen={true}
               ></iframe>
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="w-full relative py-20 text-center flex flex-col gap-20  before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-1/2 before: bg-gradient-to-t before:from-transparent before:to-red-400 before:z-10">
+            <h3 className="text-white text-base md:text-2xl font-semibold mb-4 self-start">
+              Videos
+            </h3>
+            <span className="text-2xl font-bold text-white opacity-50">
+              There are no videos related to this movie.
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="px-4 w-full md:px-8 lg:px-16 pb-16 mt-16 text-left">
@@ -114,34 +126,42 @@ const MovieDetailMainView: React.FC = () => {
           Similar Movies
         </h3>
 
-        <div className="flex flex-wrap -mx-2">
-          <Swiper
-            modules={[Autoplay, Pagination, Navigation]}
-            spaceBetween={20}
-            loop={true}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 6 },
-            }}
-            className="w-full"
-          >
-            {similarFilms.map((movie) => (
-              <SwiperSlide key={movie.id}>
-                <FilmItem
-                  id={movie.id}
-                  original_title={movie.original_title}
-                  poster_path={movie.poster_path}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        {similarFilms.length > 0 ? (
+          <div className="flex flex-wrap -mx-2">
+            <Swiper
+              modules={[Autoplay, Pagination, Navigation]}
+              spaceBetween={20}
+              loop={true}
+              autoplay={{
+                delay: 2500,
+                disableOnInteraction: false,
+              }}
+              slidesPerView={2}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                768: { slidesPerView: 4 },
+                1024: { slidesPerView: 6 },
+              }}
+              className="w-full"
+            >
+              {similarFilms.map((movie) => (
+                <SwiperSlide key={movie.id}>
+                  <FilmItem
+                    id={movie.id}
+                    original_title={movie.original_title}
+                    poster_path={movie.poster_path}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        ) : (
+          <div className="w-full py-20 text-center">
+            <span className="text-2xl font-bold text-white opacity-50">
+              There are no movies similar to this one.
+            </span>
+          </div>
+        )}
       </div>
     </main>
   );
