@@ -1,11 +1,14 @@
 
 interface Slide {
-    title: string;
-    description: string;
-    backgroundImage: string;
-    posterImage: string;
-    watchLink: string;
-  }
+  id?: number;
+  title: string;
+  description: string;
+  backgroundImage: string;
+  posterImage: string;
+  watchLink: string;
+  onclick: () => void; // Function type for onclick
+}
+
 
 import { Movie } from "../Types/Types";
 

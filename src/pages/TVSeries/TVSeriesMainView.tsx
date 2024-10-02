@@ -13,7 +13,7 @@ const TVSeriesMainView: React.FC = () => {
     handleSearch,
     resetSearch,
   } = useTVSeriesContainer();
-
+  
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
     if (e.target.value.trim() === "") {
@@ -56,7 +56,7 @@ const TVSeriesMainView: React.FC = () => {
                     original_title={tv.original_title}
                     original_name={tv.original_name}
                     name={tv.name}
-                    media_type={tv.media_type}
+                    media_type="tv"
                     poster_path={tv.poster_path}
                     className="w-full"
                   />

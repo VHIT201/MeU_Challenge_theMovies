@@ -9,14 +9,14 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="h-screen w-full p-0 m-0 ">
+    <div className="h-screen w-full p-0 m-0 bg-black">
       <Router>
         <Header />
         <Routes>
           <Route path="/" element={<HomeMainView />} />
           <Route path="/movie" element={<MoviesMainView />} />
           <Route path="/tvseries" element={<TVSeriesMainView />} />
-          <Route path="/:category/:id" element={<MovieDetailMainView />} />
+          <Route path="/:media_type/:id" element={<MovieDetailMainView />} />
         </Routes>
         <Footer />
       </Router>

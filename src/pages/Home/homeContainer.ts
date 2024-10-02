@@ -6,6 +6,7 @@ interface SwiperData {
   title: string;
   data: Movie[];
   viewMoreLink: string;
+  media_type: string;
 }
 
 const useHomeContainer = () => {
@@ -51,21 +52,25 @@ const useHomeContainer = () => {
       title: "Trending Movies",
       data: trendingMovies,
       viewMoreLink: "/movie",
+      media_type: "movie",
     },
     {
       title: "Top Rated Movies",
       data: topRatedMovies,
       viewMoreLink: "/movie",
+      media_type: "movie",
     },
     {
       title: "Top Trending TV",
       data: trendingTV,
       viewMoreLink: "/tvseries",
+      media_type: "tv",
     },
     {
       title: "Top Rated TV",
       data: topRatedTV,
       viewMoreLink: "/tvseries",
+      media_type: "tv",
     },
   ];
 
@@ -73,10 +78,24 @@ const useHomeContainer = () => {
   const loading = isTrendingMoviesLoading || isTopRatedMoviesLoading || isTrendingTVLoading || isTopRatedTVLoading;
   const error = trendingMoviesError || topRatedMoviesError || trendingTVError || topRatedTVError;
 
+  // Function to fetch videos for a specific movie
+  const fetchVideos = (movieId: string) => {
+    return useQuery({
+      queryKey: ['videos', movieId],
+      queryFn: async () => {
+        if (!movieId) return [];
+        const response = await apiClient.get(`/movie/${movieId}/videos?language=en-US`);
+        return response.data.results;
+      },
+      enabled: !!movieId, // Only run the query if movieId is set
+    });
+  };
+
   return {
     swipersData,
     loading,
     error,
+    fetchVideos, // Return fetchVideos function
   };
 };
 

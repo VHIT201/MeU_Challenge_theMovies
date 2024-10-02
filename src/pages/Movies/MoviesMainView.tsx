@@ -20,7 +20,6 @@ export const MoviesMainView: React.FC = () => {
       resetSearch(); // Nếu từ khóa trống, hiển thị phim phổ biến
     }
   };
-
   return (
     <main className="w-full flex flex-col items-center justify-start">
       <div className="relative w-full h-48 bg-gradient-to-b from-white to-black">
@@ -53,7 +52,7 @@ export const MoviesMainView: React.FC = () => {
 
           {/* Kiểm tra kết quả tìm kiếm */}
           {movies.length === 0 && !loading ? (
-            <div className="flex items-center justify-center text-center text-white h-[50vh] ">
+            <div className="flex items-center justify-center text-center text-white h-[50vh]">
               <p className="text-xl md:text-2xl">No movies found.</p>
             </div>
           ) : (
@@ -67,7 +66,7 @@ export const MoviesMainView: React.FC = () => {
                     original_title={movie.original_title}
                     original_name={movie.original_name}
                     name={movie.name}
-                    media_type={movie.media_type}
+                    media_type="movie"
                     poster_path={movie.poster_path}
                     className="w-full"
                   />
@@ -80,7 +79,7 @@ export const MoviesMainView: React.FC = () => {
                   <div className="h-[50vh] flex justify-center items-center">
                     <p>Loading...</p>
                   </div>
-                ) : !hasNextPage ? (
+                ) : hasNextPage ? (
                   <button
                     onClick={handleLoadMore}
                     className="btn-sm btn-default"
@@ -88,9 +87,9 @@ export const MoviesMainView: React.FC = () => {
                     Watch more
                   </button>
                 ) : (
-                  <p className="text-white text-opacity-50 text-xl md:text-2xl my-10">
-                    No more movies to load.
-                  </p>
+                    <p className="text-white text-opacity-50 text-xl md:text-2xl my-10">
+                      No more movies to load.
+                    </p>
                 )}
               </div>
             </>
