@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { Movie } from '../../Types/Types';
+import { useState } from 'react';
 import apiClient from '../../services/apiServices/apiServices';
 import { useInfiniteQuery } from '@tanstack/react-query';
 

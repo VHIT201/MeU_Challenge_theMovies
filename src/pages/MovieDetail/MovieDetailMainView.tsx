@@ -1,12 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { FilmDetails, Video, SimilarFilm, Credits } from "../../Types/Types";
-import useMovieDetailContainer from "./MovieDetailContainer"; // Import custom hook
+import useMovieDetailContainer from "./MovieDetailContainer";
 import Config from "../../configuration";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import FilmItem from "../../components/FilmItem";
-import { Movie } from "../../Types/Types";
 const MovieDetailMainView: React.FC = () => {
   const { id, media_type } = useParams<{ id: string; media_type: string }>();
 
@@ -16,7 +15,8 @@ const MovieDetailMainView: React.FC = () => {
   }
 
   // Use the custom hook to fetch movie details
-  const { filmDetails, videos, similarFilms, credits, loading, error } = useMovieDetailContainer(id, media_type);
+  const { filmDetails, videos, similarFilms, credits, loading, error } =
+    useMovieDetailContainer(id, media_type);
 
   // Loading state
   if (loading) {
@@ -29,7 +29,9 @@ const MovieDetailMainView: React.FC = () => {
 
   // Error handling
   if (error) {
-    return <div className="text-white text-opacity-50 text-2xl h-[70vh] flex items-center justify-center"></div>;
+    return (
+      <div className="text-white text-opacity-50 text-2xl h-[70vh] flex items-center justify-center"></div>
+    );
   }
 
   // No film details
@@ -41,13 +43,19 @@ const MovieDetailMainView: React.FC = () => {
     <main className="w-full flex flex-col items-center justify-start bg-black">
       <HeroSection filmDetails={filmDetails} credits={credits} />
       <VideosSection videos={videos} />
-      <SimilarMoviesSection media_type={media_type} similarFilms={similarFilms} />
+      <SimilarMoviesSection
+        media_type={media_type}
+        similarFilms={similarFilms}
+      />
     </main>
   );
 };
 
 // Hero section for displaying film details and cast
-const HeroSection: React.FC<{ filmDetails: FilmDetails; credits: Credits | null }> = ({ filmDetails, credits }) => (
+const HeroSection: React.FC<{
+  filmDetails: FilmDetails;
+  credits: Credits | null;
+}> = ({ filmDetails, credits }) => (
   <div
     className='relative w-full px-4 md:px-8 lg:px-16 py-12 md:pt-32 md:pb-20 bg-center bg-no-repeat bg-cover z-0 before:content-[""] before:absolute before:bottom-0 before:left-0 before:right-0 before:h-1/2 before:bg-black-main before:-z-10 after:content-[""] after:absolute after:top-0 after:left-0 after:right-0 after:h-1/2 after:bg-gradient-to-t after:from-black-main after:to-transparent after:-z-10'
     style={{
@@ -104,9 +112,11 @@ const HeroSection: React.FC<{ filmDetails: FilmDetails; credits: Credits | null 
 const VideosSection: React.FC<{ videos: Video[] }> = ({ videos }) => {
   if (videos.length === 0) {
     return (
-      <div className="relative px-4 md:px-8 lg:px-16 w-full text-left z-0 
+      <div
+        className="relative px-4 md:px-8 lg:px-16 w-full text-left z-0 
         before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-1/2 
-        before:bg-gradient-to-b before:from-black/50 before:to-black-main before:z-10">
+        before:bg-gradient-to-b before:from-black/50 before:to-black-main before:z-10"
+      >
         <div className="w-full relative py-20 text-center flex flex-col gap-20 before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-1/2 before:bg-gradient-to-t before:from-transparent before:to-back-main before:z-10">
           <h3 className="text-white text-base md:text-2xl font-semibold mb-4 self-start">
             Videos
@@ -121,7 +131,7 @@ const VideosSection: React.FC<{ videos: Video[] }> = ({ videos }) => {
 
   return (
     <div className="relative px-4 md:px-8 lg:px-16 w-full text-left z-0">
-      {videos.slice(0,5).map((item) => (
+      {videos.slice(0, 5).map((item) => (
         <div key={item.id} className="mb-16">
           <h3 className="text-white text-base md:text-2xl font-semibold mb-4">
             {item.name}
@@ -141,7 +151,10 @@ const VideosSection: React.FC<{ videos: Video[] }> = ({ videos }) => {
 };
 
 // Similar movies section
-const SimilarMoviesSection: React.FC<{ similarFilms: SimilarFilm[], media_type: string }> = ({ similarFilms, media_type }) => (
+const SimilarMoviesSection: React.FC<{
+  similarFilms: SimilarFilm[];
+  media_type: string;
+}> = ({ similarFilms, media_type }) => (
   <div className="px-4 w-full md:px-8 lg:px-16 pb-16 mt-16 text-left">
     <h3 className="text-white text-base md:text-2xl font-semibold mb-4">
       Similar
@@ -168,8 +181,8 @@ const SimilarMoviesSection: React.FC<{ similarFilms: SimilarFilm[], media_type: 
             <SwiperSlide key={movie.id}>
               <FilmItem
                 id={movie.id}
-                original_title={movie.original_title }
-                original_name={movie.original_name }
+                original_title={movie.original_title}
+                original_name={movie.original_name}
                 name={movie.name}
                 poster_path={movie.poster_path}
                 media_type={media_type}

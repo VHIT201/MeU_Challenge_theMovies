@@ -1,6 +1,5 @@
 // components/FilmSlide.tsx
 import React from 'react';
-import Config from '../../configuration';
 
 interface FilmSlideProps {
   id?: number;
@@ -13,7 +12,6 @@ interface FilmSlideProps {
 }
 
 const FilmSlide: React.FC<FilmSlideProps> = ({
-  id,
   title,
   description,
   backgroundImage,
