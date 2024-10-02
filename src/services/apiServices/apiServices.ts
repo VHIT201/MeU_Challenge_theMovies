@@ -1,10 +1,14 @@
 import axios from 'axios';
 
-const API_KEY = import.meta.env.VITE_API_KEY;
-const API_TOKEN = import.meta.env.VITE_API_TOKEN;
+// const API_KEY = import.meta.env.VITE_API_KEY;
+// const API_TOKEN = import.meta.env.VITE_API_TOKEN;
+
+const API_KEY = "2f30a285847bcb6a4f1befca239cfc20";
+const API_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyZjMwYTI4NTg0N2JjYjZhNGYxYmVmY2EyMzljZmMyMCIsIm5iZiI6MTcyNzE3MDMwOC4wNjgzMDEsInN1YiI6IjY2ZjIyYTc2ZGUyZDUyZGZiZDhkNjJmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LsbQe7RIJpuLjBGl5huNheOodieA0REwmOXzgLus7JM";
 
 const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
+    // baseURL: import.meta.env.VITE_API_BASE_URL,
+    baseURL: "https://api.themoviedb.org/3",
     headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${API_TOKEN}`, 
