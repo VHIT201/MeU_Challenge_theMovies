@@ -33,7 +33,7 @@ const FilmSlide: React.FC<FilmSlideProps> = ({
       >
         <div className="max-w-screen-2xl z-10 h-fit flex items-center justify-between">
           <div className="w-full lg:w-2/3 px-4 flex flex-col items-start">
-            <h2 className="font-bold text-4xl md:text-6xl lg:text-8xl text-white animate-fallDown">
+            <h2 className="font-bold text-4xl md:text-6xl lg:text-8xl text-white animate-fallDown text-left">
               {title}
             </h2>
             <p className="font-medium text-white text-xs md:text-xl my-12 text-left animate-fallDown">
