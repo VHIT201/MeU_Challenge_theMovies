@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import Config from "../../configuration";
 import { Movie } from "../../Types/Types";
@@ -8,11 +9,17 @@ interface FilmItemProps extends Movie {
 }
 
 const FilmItem: React.FC<FilmItemProps> = ({ id, original_title, name, original_name, poster_path, media_type, className }) => {
+  const navigate = useNavigate(); // Khai báo useNavigate
+
+  const handleNavigate = () => {
+    navigate(`/${media_type}/${id}`); // Sử dụng navigate để chuyển hướng
+  };
+
   return (
     <div className={clsx("px-2 w-full mb-8", className)}>
-      <a
-        href={`/${media_type}/${id}`}
+      <div
         className="hover:cursor-pointer group/container z-10"
+        onClick={handleNavigate} // Gọi handleNavigate khi click
       >
         <div
           className='relative w-full h-72 2xl:h-80 rounded-3xl bg-center bg-no-repeat bg-cover group/poster after:content-[""] after:absolute after:top-0 after:right-0 after:bottom-0 after:left-0 after:rounded-3xl hover:after:bg-black/60 after:transition after:ease-in-out after:duration-300'
@@ -35,7 +42,7 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, original_title, name, original_
         <h3 className="font-medium text-left text-white text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover/container:text-red-main">
           {original_title ?? original_name ?? name}
         </h3>
-      </a>
+      </div>
     </div>
   );
 };
