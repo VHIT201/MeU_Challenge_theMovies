@@ -41,12 +41,12 @@ const MovieDetailMainView: React.FC = () => {
 
   return (
     <main className="w-full flex flex-col items-center justify-start bg-black">
-      <HeroSection filmDetails={filmDetails} credits={credits} />
+      {/* <HeroSection filmDetails={filmDetails} credits={credits} />
       <VideosSection videos={videos} />
       <SimilarMoviesSection
         media_type={media_type}
         similarFilms={similarFilms}
-      />
+      /> */}
     </main>
   );
 };
