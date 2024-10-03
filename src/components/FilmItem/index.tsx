@@ -40,4 +40,4 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, original_title, name, original_
   );
 };
 
-export default React.memo(FilmItem);
+export default FilmItem;

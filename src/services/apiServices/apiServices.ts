@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Config from '../../configuration';
 // const API_KEY = import.meta.env.VITE_API_KEY;
 const API_KEY = "2f30a285847bcb6a4f1befca239cfc20";
 // const API_TOKEN = import.meta.env.VITE_API_TOKEN;
