@@ -191,7 +191,7 @@ const HomeMainView: React.FC = () => {
     return (
       <div className="h-[70vh] bg-black flex justify-center items-center flex-row gap-10">
         <Spinner/>
-        <span className="text-white text-xl md:text-2xl">Đang tải dữ liệu, vui lòng đợi</span>
+        <span className="text-white text-opacity-50 text-xl md:text-2xl">Loading data, please wait</span>
       </div>
     );
   }
