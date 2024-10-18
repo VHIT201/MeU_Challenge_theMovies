@@ -1,6 +1,8 @@
 import logo from './tmovie_logo.png';
 import footerImg from './footer_bg.jpg'
+import default_image from './default_image.png'
 export const Images: { [key: string]: string } = {
     logo,
-    footerImg
+    footerImg,
+    default_image
 };

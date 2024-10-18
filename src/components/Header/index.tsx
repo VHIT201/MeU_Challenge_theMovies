@@ -1,31 +1,53 @@
-import React, { useState, useEffect, useCallback } from "react";
+// Core: Main libraries
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+
+//Images
 import { Images } from "../../assets/images";
 
+// Component: Navigation Links 
+const NavigationLinks = () => (
+  <div className="fixed md:relative left-0 md:left-auto right-0 md:right-auto bottom-0 md:bottom-auto flex items-center justify-evenly bg-black md:bg-transparent py-2 md:py-4 -mx-4">
+    <div className="px-4">
+      <NavLink className="nav-item" to="/" end>
+        Home
+      </NavLink>
+    </div>
+    <div className="px-4">
+      <NavLink className="nav-item" to="/movie">
+        Movies
+      </NavLink>
+    </div>
+    <div className="px-4">
+      <NavLink className="nav-item" to="/tv">
+        TV Series
+      </NavLink>
+    </div>
+  </div>
+);
+
+// Component: Header
 const Header: React.FC = () => {
+  // States: Scroll state
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Sự kiện theo dõi khi người dùng cuộn
-  const handleScroll = useCallback(() => {
-    const scrollY = window.scrollY;
-    if (scrollY > 90 && !isScrolled) {
-      setIsScrolled(true);
-    } else if (scrollY <= 90 && isScrolled) {
-      setIsScrolled(false);
-    }
-  }, [isScrolled]);
-
+  // Method: handleScroll with logic moved inside
   useEffect(() => {
-    const onScroll = () => {
-      // Sử dụng requestAnimationFrame để tối ưu hóa hiệu suất
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 90);
+    };
+
+    // Debounce scroll event for better performance
+    const debouncedScroll = () => {
       requestAnimationFrame(handleScroll);
     };
 
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", debouncedScroll);
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", debouncedScroll);
     };
-  }, [handleScroll]);
+  }, []);
 
   return (
     <div
@@ -43,23 +65,8 @@ const Header: React.FC = () => {
             theMovies
           </h1>
         </a>
-        <div className="fixed md:relative left-0 md:left-auto right-0 md:right-auto bottom-0 md:bottom-auto flex items-center justify-evenly bg-black md:bg-transparent py-2 md:py-4 -mx-4">
-          <div className="px-4">
-            <NavLink className="nav-item" to="/" end>
-              Home
-            </NavLink>
-          </div>
-          <div className="px-4">
-            <NavLink className="nav-item" to="/movie">
-              Movies
-            </NavLink>
-          </div>
-          <div className="px-4">
-            <NavLink className="nav-item" to="/tvseries">
-              TV Series
-            </NavLink>
-          </div>
-        </div>
+        {/* Component: Navigation links */}
+        <NavigationLinks />
       </div>
     </div>
   );

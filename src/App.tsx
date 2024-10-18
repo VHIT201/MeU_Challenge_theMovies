@@ -1,23 +1,34 @@
+//Core
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+
+// CSS
 import './App.css';
-import HomeMainView from './pages/Home/HomeMainView';
-import { MoviesMainView } from './pages/Movies/MoviesMainView';
-import TVSeriesMainView from './pages/TVSeries/TVSeriesMainView';
-import MovieDetailMainView from './pages/MovieDetail/MovieDetailMainView';
+
+// Components
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Spinner from './components/Spinner/Spinner';
+
+// Lazy loading pages
+const Home = lazy(() => import('./pages/Home/Home'));
+const MovieDetail = lazy(() => import('./pages/MovieDetail/MovieDetail'));
+const Media = lazy(() => import('./pages/Media/Media'));
 
 function App() {
   return (
-    <div className="h-screen w-full p-0 m-0 bg-black">
+    <div className="app-container bg-black">
       <Router>
         <Header />
-        <Routes>
-          <Route path="/" element={<HomeMainView />} />
-          <Route path="/movie" element={<MoviesMainView />} />
-          <Route path="/tvseries" element={<TVSeriesMainView />} />
-          <Route path="/:media_type/:id" element={<MovieDetailMainView />} />
-        </Routes>
+        <div className="app-content">
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/:media_type" element={<Media />} />
+              <Route path="/:media_type/:id" element={<MovieDetail />} />
+            </Routes>
+          </Suspense>
+        </div>
         <Footer />
       </Router>
     </div>

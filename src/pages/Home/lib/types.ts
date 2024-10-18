@@ -6,4 +6,5 @@ export interface SwiperData {
     data: Movie[];
     viewMoreLink: string;
     media_type: string;
+    isLoading: boolean
   }

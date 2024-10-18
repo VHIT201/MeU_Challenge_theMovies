@@ -1,31 +1,50 @@
-import React from "react";
+// Core: Main libraries
+import React, { useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import Config from "../../configuration";
-import { Movie } from "../../Types/Types";
+import { Images } from "../../assets/images";
 
-interface FilmItemProps extends Movie {
-  className?: string; 
-}
+// Types: Props types declaration
+import { FilmItemProps } from "./lib/types";
 
-const FilmItem: React.FC<FilmItemProps> = ({ id, original_title, name, original_name, poster_path, media_type, className }) => {
-  const navigate = useNavigate(); // Khai báo useNavigate
+// Component: FilmItem
+const FilmItem: React.FC<FilmItemProps> = ({
+  id,
+  original_title,
+  name,
+  original_name,
+  poster_path,
+  media_type,
+  className,
+}) => {
+  // States: Navigation hook for programmatic navigation
+  const navigate = useNavigate();
 
-  const handleNavigate = () => {
-    navigate(`/${media_type}/${id}`); // Sử dụng navigate để chuyển hướng
-  };
+  // Method: handleNavigate
+  const handleNavigate = useCallback(() => {
+    navigate(`/${media_type}/${id}`);
+  }, [navigate, media_type, id]);
+
+  // Core: Background image handling
+  const backgroundImage = poster_path
+    ? `${Config.imgPath}${poster_path}`
+    : Images.default_image;
+
+  // Core: Title handling
+  const title = original_title || original_name || name;
 
   return (
     <div className={clsx("px-2 w-full mb-8", className)}>
-      <div
-        className="hover:cursor-pointer group/container z-10"
-        onClick={handleNavigate} // Gọi handleNavigate khi click
-      >
+      {/* Component: Wrapper for film item */}
+      <div className="hover:cursor-pointer group z-10" onClick={handleNavigate}>
+        {/* Background image and hover effects */}
         <div
-          className='relative w-full h-72 2xl:h-80 rounded-3xl bg-center bg-no-repeat bg-cover group/poster after:content-[""] after:absolute after:top-0 after:right-0 after:bottom-0 after:left-0 after:rounded-3xl hover:after:bg-black/60 after:transition after:ease-in-out after:duration-300'
-          style={{ backgroundImage: `url(${Config.imgPath + poster_path})` }}
+          className="relative w-full h-72 2xl:h-80 rounded-3xl bg-center bg-no-repeat bg-cover transition duration-300 group-hover:after:bg-black/60"
+          style={{ backgroundImage: `url(${backgroundImage})` }}
         >
-          <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-4 px-8 bg-red-main rounded-full shadow-btn z-10 text-white text-xl scale-50 opacity-0 transition ease-in-out duration-300 group-hover/poster:opacity-100 group-hover/poster:scale-100 hover:shadow-btn-hover">
+          {/* Play button overlay */}
+          <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-4 px-8 bg-red-main rounded-full shadow-btn text-white text-xl scale-50 opacity-0 transition duration-300 group-hover:opacity-100 group-hover:scale-100">
             <svg
               stroke="currentColor"
               fill="currentColor"
@@ -39,12 +58,14 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, original_title, name, original_
             </svg>
           </button>
         </div>
-        <h3 className="font-medium text-left text-white text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover/container:text-red-main">
-          {original_title ?? original_name ?? name}
+        {/* Film title display */}
+        <h3 className="font-medium text-left text-white text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover:text-red-main">
+          {title}
         </h3>
       </div>
     </div>
   );
 };
 
-export default FilmItem;
+// Optimize component rendering
+export default memo(FilmItem);
