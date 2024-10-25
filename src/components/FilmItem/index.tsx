@@ -1,14 +1,11 @@
-// Core: Main libraries
-import React, { useCallback, memo } from "react";
+import React, { useCallback, memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import Config from "../../configuration";
 import { Images } from "../../assets/images";
 
-// Types: Props types declaration
 import { FilmItemProps } from "./lib/types";
 
-// Component: FilmItem
 const FilmItem: React.FC<FilmItemProps> = ({
   id,
   original_title,
@@ -18,31 +15,47 @@ const FilmItem: React.FC<FilmItemProps> = ({
   media_type,
   className,
 }) => {
-  // States: Navigation hook for programmatic navigation
   const navigate = useNavigate();
 
-  // Method: handleNavigate
+  // State: Handle image loading error
+  const [imageSrc, setImageSrc] = useState(
+    poster_path ? `${Config.imgPath}${poster_path}` : Images.default_image
+  );
+
+  // const [imageSrc, setImageSrc] = useState(
+  //   `${Config.imgPath}/invalid_path.jpg` // Đường dẫn ảnh không hợp lệ
+  // );
+  
+
+  // Handle navigation
   const handleNavigate = useCallback(() => {
     navigate(`/${media_type}/${id}`);
   }, [navigate, media_type, id]);
 
-  // Core: Background image handling
-  const backgroundImage = poster_path
-    ? `${Config.imgPath}${poster_path}`
-    : Images.default_image;
+  // Handle image error
+  const handleImageError = () => {
+    setImageSrc(Images.noImage); // Fallback to noImage if there's an error
+  };
 
-  // Core: Title handling
+  // Title handling
   const title = original_title || original_name || name;
 
   return (
     <div className={clsx("px-2 w-full mb-8", className)}>
-      {/* Component: Wrapper for film item */}
       <div className="hover:cursor-pointer group z-10" onClick={handleNavigate}>
         {/* Background image and hover effects */}
         <div
-          className="relative w-full h-72 2xl:h-80 rounded-3xl bg-center bg-no-repeat bg-cover transition duration-300 group-hover:after:bg-black/60"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
+          className="relative w-full h-72 2xl:h-80 rounded-3xl bg-center bg-no-repeat bg-cover transition duration-300 group-hover:after:bg-black/60 animate-parallax"
+          style={{ backgroundImage: `url(${imageSrc})` }}
         >
+          {/* Display image directly */}
+          <img
+            src={imageSrc}
+            alt={title}
+            onError={handleImageError}
+            className="absolute w-full h-full object-cover rounded-3xl"
+          />
+
           {/* Play button overlay */}
           <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-4 px-8 bg-red-main rounded-full shadow-btn text-white text-xl scale-50 opacity-0 transition duration-300 group-hover:opacity-100 group-hover:scale-100">
             <svg
@@ -67,5 +80,4 @@ const FilmItem: React.FC<FilmItemProps> = ({
   );
 };
 
-// Optimize component rendering
 export default memo(FilmItem);

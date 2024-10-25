@@ -1,103 +1,98 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
-
-// Internal
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { fetchMedia } from "../../services/media/mediaService";
 import { MediaType } from "../../services/media/lib/type";
-import { useMediaQuery } from "../../services/media/queries/mediaQueries";
-
-// Component
 import FilmItem from "../../components/FilmItem";
 import SearchForm from "../../components/SearchForm";
-import StateDisplay from "./components/stateDisplay";
-import Skeleton from 'react-loading-skeleton'; // Import thư viện Skeleton
-import 'react-loading-skeleton/dist/skeleton.css'; // Thêm CSS cho skeleton
+import Spinner from "../../components/Spinner/Spinner";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const Media = () => {
-  // States
+  // Lấy từ khóa tìm kiếm từ URL query string
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialSearchTerm = searchParams.get("query") || "";
-  const [keyword, setKeyword] = useState<string>(initialSearchTerm);
-  const [searchTerm, setSearchTerm] = useState<string>(initialSearchTerm);
+  const searchTerm = searchParams.get("query") || "";
 
-  // Params
+  // Lấy loại media từ URL params
   const params = useParams<{ media_type: string }>();
-  const mediaType =
-    params.media_type === MediaType.TV ? MediaType.TV : MediaType.Movie;
-  const pageTitle = mediaType === MediaType.Movie ? "Movies" : "TV Series";
+  const mediaType = params.media_type === MediaType.TV ? MediaType.TV : MediaType.Movie;
+  const pageTitle = useMemo(() => mediaType === MediaType.Movie ? "Movies" : "TV Series", [mediaType]);
 
-  // Queries
+  // Fetch dữ liệu media
   const {
     data: mediaData,
     fetchNextPage,
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useMediaQuery(mediaType, searchTerm);
+  } = useInfiniteQuery({
+    queryKey: ["media", mediaType, searchTerm],
+    queryFn: ({ pageParam = 1 }) =>
+      fetchMedia({ mediaType, searchTerm, pageParam }),
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 1,
+  });
 
-  // Media Items
+  // Xử lý dữ liệu media
   const mediaItems = useMemo(
     () => mediaData?.pages.flatMap((page) => page.results) || [],
     [mediaData]
   );
-  const noItems = mediaItems.length === 0;
 
-  // Methods
+  // Memoize noItems để tránh tính toán lại không cần thiết
+  const noItems = useMemo(() => mediaItems.length === 0, [mediaItems]);
+
+  // Hàm tải thêm dữ liệu
   const handleLoadMore = useCallback(() => {
-    fetchNextPage();
-  }, [fetchNextPage]);
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
+  // Hàm xử lý tìm kiếm
   const handleSearch = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (keyword.trim() && keyword.trim() !== searchTerm) {
-        setSearchParams({ query: keyword });
-        setSearchTerm(keyword);
-      } else if (!keyword.trim()) {
-        setSearchParams({});
-        setSearchTerm("");
-      }
+    (keyword: string) => {
+      const trimmedKeyword = keyword.trim();
+      setSearchParams(trimmedKeyword ? { query: trimmedKeyword } : {});
     },
-    [keyword, searchTerm, setSearchParams]
+    [setSearchParams]
   );
 
-  const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value);
-    if (e.target.value.trim() === "") {
-      setSearchParams({});
-    }
-  };
+  // Điều kiện hiển thị trạng thái
+  const isLoadingInitial = useMemo(() => isFetching && noItems, [isFetching, noItems]);
+  const isNoResults = useMemo(() => !isFetching && noItems, [isFetching, noItems]);
 
-  // Effects
-  useEffect(() => {
-    if (initialSearchTerm && searchTerm !== initialSearchTerm) {
-      setSearchTerm(initialSearchTerm);
-    }
-  }, [initialSearchTerm, searchTerm]);
-
-  // Render
+  // Render component
   return (
     <main className="w-full flex flex-col items-center justify-start">
       <div className="relative w-full h-48 bg-gradient-to-b from-white to-black">
-        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:translate-y-0 text-white text-4xl font-bold z-10">
+        <span className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 md:translate-y-0 text-white text-4xl font-bold z-10">
           {pageTitle}
         </span>
       </div>
 
       <div className="bg-black-main w-full px-4 md:px-8 py-8 xl:p-16">
         <div className="max-w-screen-2xl mx-auto">
-          <SearchForm
-            keyword={keyword}
-            onKeywordChange={handleKeywordChange}
-            onSubmit={handleSearch}
-          />
+          <SearchForm initialKeyword={searchTerm} onSubmit={handleSearch} />
 
-          {/* Nếu đang tải phim hoặc không có phim nào */}
-          {isFetching && noItems ? (
-            <StateDisplay isLoading={true} pageTitle={pageTitle} />
-          ) : noItems ? (
-            <StateDisplay isLoading={false} pageTitle={pageTitle} />
+          {/* Hiển thị trạng thái ban đầu */}
+          {isLoadingInitial ? (
+            <div className="flex flex-row items-center justify-center text-center text-white h-[50vh] gap-10">
+              <Spinner />
+              <p className="text-xl md:text-2xl text-opacity-50">
+                Loading {pageTitle}, please wait...
+              </p>
+            </div>
+          ) : isNoResults ? (
+            <div className="flex flex-row items-center justify-center text-center text-white h-[50vh] gap-10">
+              <p className="text-xl md:text-2xl text-white text-opacity-50">
+                No {pageTitle} found matching your criteria.
+              </p>
+            </div>
           ) : (
             <>
+              {/* Danh sách media items */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-16">
                 {mediaItems.map((item) => (
                   <FilmItem
@@ -112,17 +107,17 @@ const Media = () => {
                   />
                 ))}
 
-                {/* Hiển thị skeleton loaders khi đang fetching thêm dữ liệu */}
-                {isFetchingNextPage && (
+                {/* Hiển thị skeleton khi đang tải thêm dữ liệu */}
+                {isFetchingNextPage &&
                   Array.from({ length: 6 }).map((_, index) => (
                     <div key={index} className="w-full h-full rounded-rounded">
-                      <Skeleton height={220} width="100%" borderRadius={20}/>
+                      <Skeleton height={220} width="100%" borderRadius={20} />
                       <Skeleton width="80%" style={{ marginTop: '8px' }} />
                     </div>
-                  ))
-                )}
+                  ))}
               </div>
 
+              {/* Nút tải thêm dữ liệu */}
               <div className="text-center mt-8">
                 {isFetchingNextPage ? (
                   <div className="h-[20vh] flex justify-center items-center">
@@ -132,10 +127,13 @@ const Media = () => {
                   <button
                     onClick={handleLoadMore}
                     className="btn-sm btn-default"
+                    disabled={isFetchingNextPage}
                   >
                     Load More
                   </button>
-                ) : null}
+                ) : (
+                  <span className="text-lg opacity-60">No more items to load</span>
+                )}
               </div>
             </>
           )}

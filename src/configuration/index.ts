@@ -9,10 +9,12 @@ interface EnvConfig {
   };
   
   const imgPath = 'https://image.tmdb.org/t/p/w500'
+  const backDropPath = 'https://image.tmdb.org/t/p/original//'
 
   const Config = {
     envConfig,
-    imgPath
+    imgPath,
+    backDropPath
   };
   
   export default Config;

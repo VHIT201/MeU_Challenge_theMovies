@@ -1,19 +1,19 @@
 //Core
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
 
 // CSS
-import './App.css';
+import "./App.css";
 
 // Components
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Spinner from './components/Spinner/Spinner';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Spinner from "./components/Spinner/Spinner";
 
 // Lazy loading pages
-const Home = lazy(() => import('./pages/Home/Home'));
-const MovieDetail = lazy(() => import('./pages/MovieDetail/MovieDetail'));
-const Media = lazy(() => import('./pages/Media/Media'));
+const Home = lazy(() => import("./pages/Home/Home"));
+const MovieDetail = lazy(() => import("./pages/MovieDetail/MovieDetail"));
+const Media = lazy(() => import("./pages/Media/Media"));
 
 function App() {
   return (
