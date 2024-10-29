@@ -26,15 +26,7 @@ const HeaderSwiper: React.FC<HeaderSwiperProps> = ({
       {swipersData[0].data.slice(0, 4).map((movie, index) => (
         <SwiperSlide key={index}>
           
-            <FilmSlide
-              id={movie.id}
-              title={movie.original_title}
-              description={movie.overview}
-              backgroundImage={Config.backDropPath + movie.backdrop_path}
-              posterImage={Config.imgPath + movie.poster_path}
-              onWatchNow={() => onWatchNow(movie.id)} // Pass the navigation function
-              onWatchTrailer={() => onWatchTrailer(movie.id)}
-            />
+            
           
         </SwiperSlide>
       ))}

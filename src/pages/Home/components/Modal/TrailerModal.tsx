@@ -1,7 +1,12 @@
 import React from "react";
-import { ModalProps } from "./lib/Type";
 
-const Modal: React.FC<ModalProps> = ({ videoKey, onClose }) => {
+// Type
+interface TrailerModalProps {
+  videoKey: string | null;
+  onClose: () => void;
+}
+
+const TrailerModal: React.FC<TrailerModalProps> = ({ videoKey, onClose }) => {
   if (!videoKey) return null; 
 
   return (
@@ -30,4 +35,4 @@ const Modal: React.FC<ModalProps> = ({ videoKey, onClose }) => {
   );
 };
 
-export default Modal;
+export default TrailerModal;

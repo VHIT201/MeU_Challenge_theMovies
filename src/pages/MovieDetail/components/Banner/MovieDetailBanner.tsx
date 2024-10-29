@@ -2,7 +2,7 @@
 import React from "react";
 
 //Type
-import { FilmDetails, Credits } from "../../../../Types/Types";
+import { FilmDetails, Credits } from "../../../../types";
 
 // Internal
 import Config from "../../../../configuration";

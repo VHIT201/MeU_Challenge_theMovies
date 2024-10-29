@@ -1,5 +1,5 @@
 import React from "react";
-import { Video } from "../../../../Types/Types";
+import { Video } from "../../../../types";
 
 /**
  * Component: Displays section with related videos.

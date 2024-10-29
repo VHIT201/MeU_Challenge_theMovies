@@ -1,4 +1,4 @@
-import { Movie } from "../../../Types/Types";
+import { Movie } from "../../../types";
 
 
 export interface SwiperData {

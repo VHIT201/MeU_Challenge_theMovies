@@ -1,5 +1,5 @@
 //Core
-import { Movie } from "../../../../../Types/Types"; 
+import { Movie } from "../../../../../types"; 
 
 // Types
 export default interface FilmSectionProps {
