@@ -56,7 +56,7 @@ const HomePage: React.FC = () => {
 
     return (
         <main className="w-full flex flex-col items-center justify-start gap bg-black">
-            <Carousel loop autoplay={{ delay: 3000, disableOnInteraction: true }} className="w-full mb-0 p-0">
+            <Carousel loop className="w-full mb-0 p-0">
                 {trendingFilmList ? (
                     trendingFilmList
                         .slice(0, 4)
@@ -113,4 +113,4 @@ const HomePage: React.FC = () => {
     );
 };
 
-export { HomePage };
+export default HomePage;

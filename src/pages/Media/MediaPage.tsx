@@ -1,14 +1,19 @@
+// Core
 import React, { useMemo, useCallback } from 'react';
 import { useSearchParams, useParams } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { fetchMedia } from '../../services/media/mediaService';
-import { MediaType } from '../../services/media/lib/type';
-import SearchForm from '../../components/SearchForm';
-import Spinner from '../../components/Spinner/Spinner';
 import 'react-loading-skeleton/dist/skeleton.css';
+
+// App
+import { fetchMedia } from '@/services/media/mediaService';
+import { MediaType } from '@/services/media/lib/type';
+import SearchForm from '@/components/SearchForm';
+import Spinner from '@/components/Spinner/Spinner';
+
+// Internal
 import { FilmList } from './components/FilmList';
 
-const FilmListPage = () => {
+const MediaPage = () => {
     // Lấy từ khóa tìm kiếm từ URL query string
     const [searchParams, setSearchParams] = useSearchParams();
     const searchTerm = searchParams.get('query') || '';
@@ -91,4 +96,4 @@ const FilmListPage = () => {
     );
 };
 
-export default React.memo(FilmListPage);
+export default MediaPage;

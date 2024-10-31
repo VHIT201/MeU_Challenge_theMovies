@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
+
 import 'swiper/css';
+import 'swiper/css/effect-coverflow';
 
 // App
 import { cn } from '@/utils';
@@ -24,6 +26,7 @@ const Carousel: FC<CarouselProps> = ({
     pagination,
     className,
     children,
+    ...props
 }) => {
     // Template
     return (
@@ -38,13 +41,15 @@ const Carousel: FC<CarouselProps> = ({
             modules={[
                 ...(coverflowEffect ? [EffectCoverflow] : []),
                 ...(autoplay ? [Autoplay] : []),
-                Navigation,
-                Pagination,
+                ...(pagination ? [Pagination] : []),
             ]}
+            {...props}
         >
             {Array.isArray(children) ? (
                 children.map((slide) => (
-                    <SwiperSlide key={'slide' + slide.key}>{React.cloneElement(slide)}</SwiperSlide>
+                    <SwiperSlide style={{ width: '800px' }} key={'slide' + slide.key}>
+                        {React.cloneElement(slide)}
+                    </SwiperSlide>
                 ))
             ) : (
                 <SwiperSlide>{React.cloneElement(children)}</SwiperSlide>
