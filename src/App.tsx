@@ -1,16 +1,20 @@
 //Core
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 
 // CSS
 import './App.css';
 
 // Components
 import Spinner from './components/Spinner/Spinner';
-import MainLayout from './layouts/MainLayout/MainLayout';
+import MainLayout from './layouts/mainlayout/mainLayout';
 
 // Lazy loading pages
-import { HomePage, MediaPage, FilmDetailPage, LoginPage, SignUpPage, FavoriteListPage } from './pages';
+
+
+import { HomePage, MediaPage, FilmDetailPage, FavoriteListPage } from './pages';
+
+const Authenticate = lazy(() => import("./pages/Authenticate/Authenticate"));
 
 function App() {
     return (
@@ -18,10 +22,9 @@ function App() {
             <Router>
                 <Suspense fallback={<Spinner />}>
                     <Routes>
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/signup" element={<SignUpPage />} />
+                        <Route path="/" element={<Authenticate />} />
                         <Route element={<MainLayout />}>
-                            <Route path="" element={<HomePage />} />
+                            <Route path="/home" element={<HomePage />} />
                             <Route path="/:media_type" element={<MediaPage />} />
                             <Route path="/:media_type/:id" element={<FilmDetailPage />} />
                             <Route path="/favorite" element={<FavoriteListPage />} />

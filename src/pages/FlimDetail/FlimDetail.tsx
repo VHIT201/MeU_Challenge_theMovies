@@ -8,7 +8,6 @@ import { fetchFilmDetails, fetchCredits, fetchSimilarFilms, fetchVideos } from '
 
 const FilmDetailMainView: React.FC = () => {
     const { id, media_type } = useParams<{ id: string; media_type: string }>();
-
     const urlBase = `${media_type}/${id}`;
 
     const {

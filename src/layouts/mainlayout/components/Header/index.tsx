@@ -1,8 +1,11 @@
 // Core: Main libraries
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { fetchUserInfo } from '@/services/user/userService';
+import { User } from '@/types';
 
-//Images
+// Images
 import { Images } from '../../../../assets/images';
 
 // Component: Navigation Links
@@ -31,6 +34,13 @@ const Header: React.FC = () => {
     // States: Scroll state
     const [isScrolled, setIsScrolled] = useState(false);
 
+    // Fetch user information using useQuery
+    const { data: userInfo } = useQuery<User>({
+        queryKey: ['userInfo'],
+        queryFn: fetchUserInfo,
+        retry: false, // Disable retry if not logged in
+    });
+
     // Method: handleScroll with logic moved inside
     useEffect(() => {
         const handleScroll = () => {
@@ -55,15 +65,38 @@ const Header: React.FC = () => {
                 isScrolled ? 'py-4 bg-black-main' : 'py-0 md:py-8 bg-transparent'
             }`}
         >
-            <div className="max-w-screen-2xl flex justify-between items-center w-full">
+            <div className="max-w-screen-2xl  flex justify-between items-center w-full">
                 <a className="hidden md:flex items-center hover:cursor-pointer group" href="/">
                     <img src={Images.logo} alt="Logo" className="mr-4 w-8 md:w-12" />
                     <h1 className="text-white font-semibold text-2xl md:text-4xl group-hover:text-red-main group-hover:transition-custom">
                         theMovies
                     </h1>
                 </a>
-                {/* Component: Navigation links */}
-                <NavigationLinks />
+
+                <div className="flex flex-row items-center gap-10">
+                    {/* Component: Navigation links */}
+                    <NavigationLinks />
+
+                    {/* User Information or Login Button */}
+                    <div className="text-white font-medium">
+                        {userInfo ? (
+                            <div className="flex flex-row justify-center gap-4 items-center">
+                                <span>{userInfo.username}</span>
+                                {userInfo.avatar.tmdb.avatar_path && (
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/w32_and_h32_face${userInfo.avatar.tmdb.avatar_path}`}
+                                        alt="User Avatar"
+                                        className="w-8 h-8 rounded-full"
+                                    />
+                                )}
+                            </div>
+                        ) : (
+                            <NavLink to="/authenticate" className="nav-item">
+                                Đăng nhập
+                            </NavLink>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

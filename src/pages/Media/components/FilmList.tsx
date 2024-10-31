@@ -23,7 +23,7 @@ const FilmList: React.FC<FilmListProps> = ({ filmList, isFetchingNextPage, hasNe
                 name: film.name ?? '',
                 original_name: film.original_name ?? '',
                 poster_path: film.poster_path ?? '',
-                media_type: film.media_type ?? 'unknown',
+                media_type: mediaType
             }));
     }, [filmList]);
 

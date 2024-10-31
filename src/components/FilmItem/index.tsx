@@ -1,5 +1,6 @@
 import React, { useCallback, memo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import apiClient from '@/network/axios';
 import Config from '../../configuration';
 import { Images } from '../../assets/images';
 import { ComponentProps } from '@/types';
@@ -25,35 +26,44 @@ const FilmItem: React.FC<FilmItemProps> = ({
 }) => {
     const navigate = useNavigate();
 
-    // State: Handle image loading error
+    // State to manage favorite status and image source
+    const [isFavorite, setIsFavorite] = useState(false);
     const [imageSrc, setImageSrc] = useState(poster_path ? `${Config.imgPath}${poster_path}` : Images.default_image);
 
-    // const [imageSrc, setImageSrc] = useState(
-    //   `${Config.imgPath}/invalid_path.jpg` // Đường dẫn ảnh không hợp lệ
-    // );
+    const title = original_title || original_name || name;
 
-    // Handle navigation
+    // Toggle favorite status
+    const toggleFavorite = async (e: React.MouseEvent) => {
+        console.log('Click thêm favourite');
+        e.stopPropagation();
+        try {
+            const response = await apiClient.post('/account/21535262/favorite', {
+                media_type:media_type,
+                media_id: id,
+                favorite: !isFavorite,
+            });
+            setIsFavorite(!isFavorite); // Toggle favorite state on successful request
+            console.log('Click thêm favourite',response);
+        } catch (error) {
+            console.error('Error updating favorite:', error);
+        }
+    };
+
     const handleNavigate = useCallback(() => {
         navigate(`/${media_type}/${id}`);
     }, [navigate, media_type, id]);
 
-    // Handle image error
     const handleImageError = () => {
-        setImageSrc(Images.noImage); // Fallback to noImage if there's an error
+        setImageSrc(Images.noImage);
     };
-
-    // Title handling
-    const title = original_title || original_name || name;
 
     return (
         <div className={cn('px-2 w-full mb-8', className)}>
-            <div className="hover:cursor-pointer group z-10" onClick={handleNavigate}>
-                {/* Background image and hover effects */}
+            <div className="hover:cursor-pointer group z-10 relative" onClick={handleNavigate}>
                 <div
                     className="relative w-full h-72 2xl:h-80 rounded-3xl bg-center bg-no-repeat bg-cover transition duration-300 group-hover:after:bg-black/60 animate-parallax"
                     style={{ backgroundImage: `url(${imageSrc})` }}
                 >
-                    {/* Display image directly */}
                     <img
                         src={imageSrc}
                         alt={title}
@@ -61,22 +71,24 @@ const FilmItem: React.FC<FilmItemProps> = ({
                         className="absolute w-full h-full object-cover rounded-3xl"
                     />
 
-                    {/* Play button overlay */}
-                    <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-4 px-8 bg-red-main rounded-full shadow-btn text-white text-xl scale-50 opacity-0 transition duration-300 group-hover:opacity-100 group-hover:scale-100">
+                    {/* Heart icon for favorite functionality */}
+                    <button 
+                        className="absolute top-3 right-3 p-1 rounded-full transition hover:bg-red-500"
+                        onClick={toggleFavorite}
+                    >
                         <svg
-                            stroke="currentColor"
-                            fill="currentColor"
-                            strokeWidth="0"
-                            viewBox="0 0 16 16"
-                            height="1em"
-                            width="1em"
                             xmlns="http://www.w3.org/2000/svg"
+                            fill={isFavorite ? "red" : "currentColor"} 
+                            viewBox="0 0 24 24"
+                            width="24"
+                            height="24"
+                            className="text-white"
                         >
-                            <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                         </svg>
                     </button>
                 </div>
-                {/* Film title display */}
+                
                 <h3 className="font-medium text-left text-white text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover:text-red-main">
                     {title}
                 </h3>
