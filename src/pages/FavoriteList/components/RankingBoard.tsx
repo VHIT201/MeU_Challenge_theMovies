@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StackWeekend } from './StackWeekend';
+import { FilmType } from '@/types';
+import { MediaType } from '@/services/media/lib/type';
 
-const RankingBoard = () => {
+interface RankingBoardProps {
+    filmList: Array<FilmType>;
+    mediaType: MediaType;
+}
+
+const RankingBoard: FC<RankingBoardProps> = ({ filmList, mediaType }) => {
     return (
         <div
-            className="p-8 mx-auto rounded-lg bg-white bg-opacity-5"
+            className="p-8 mx-auto rounded-lg bg-gradient-to-bl from-[#0d0d0d] via-[#333333] to-[#0d0d0d]"
             style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px' }}
         >
             <table className="w-full text-white">
@@ -18,10 +25,10 @@ const RankingBoard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.from({ length: 10 }, (_, index) => (
-                        <tr key={index} className="text-lg font-medium">
+                    {filmList.slice(0, 10).map((film, index) => (
+                        <tr key={film.id} className="text-lg font-medium">
                             <td className="text-gray-500">{index + 1}</td>
-                            <td>Incoming</td>
+                            <td>{mediaType === 'movie' ? film.title : film.name}</td>
                             <td className="flex justify-center">
                                 <StackWeekend stackNumber={1} />
                             </td>

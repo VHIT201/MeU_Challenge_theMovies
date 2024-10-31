@@ -2,6 +2,14 @@ export interface ComponentProps {
     className?: string;
 }
 
+export interface FavoriteFilm {
+    id: string;
+    backdrop_path: string;
+    title: string;
+    overview: string;
+    genre_ids: Array<number>;
+}
+
 export type FilmType = {
     adult?: boolean;
     backdrop_path?: string;
@@ -10,6 +18,7 @@ export type FilmType = {
     original_title?: string;
     id: number;
     name?: string;
+    title?: string;
     media_type?: string;
     origin_country?: string[];
     original_language?: string;
@@ -26,6 +35,7 @@ export type FilmResponseType = {
     original_title?: string;
     id: number;
     name?: string;
+    title?: string;
     media_type?: string;
     original_name?: string | null | undefined;
     overview?: string;
@@ -147,15 +157,14 @@ export interface Credits {
     crew: Crew[];
 }
 
-
 export interface User {
     avatar: {
-      gravatar: {
-        hash: string;
-      };
-      tmdb: {
-        avatar_path: string;
-      };
+        gravatar: {
+            hash: string;
+        };
+        tmdb: {
+            avatar_path: string;
+        };
     };
     id: number;
     iso_639_1: string;
@@ -163,4 +172,4 @@ export interface User {
     name: string;
     include_adult: boolean;
     username: string;
-  }
+}

@@ -62,6 +62,7 @@ const HomePage: React.FC = () => {
                         .slice(0, 4)
                         .map((movie) => (
                             <FilmSlide
+                                key={movie.id}
                                 id={movie.id}
                                 title={movie.original_title}
                                 description={movie.overview}

@@ -7,14 +7,13 @@ import './App.css';
 
 // Components
 import Spinner from './components/Spinner/Spinner';
-import MainLayout from './layouts/mainlayout/mainLayout';
 
 // Lazy loading pages
 
-
 import { HomePage, MediaPage, FilmDetailPage, FavoriteListPage } from './pages';
+import MainLayout from './layouts/MainLayout/MainLayout';
 
-const Authenticate = lazy(() => import("./pages/Authenticate/Authenticate"));
+const Authenticate = lazy(() => import('./pages/Authenticate/Authenticate'));
 
 function App() {
     return (
@@ -27,7 +26,7 @@ function App() {
                             <Route path="/home" element={<HomePage />} />
                             <Route path="/:media_type" element={<MediaPage />} />
                             <Route path="/:media_type/:id" element={<FilmDetailPage />} />
-                            <Route path="/favorite" element={<FavoriteListPage />} />
+                            <Route path="/:media_type/favorite" element={<FavoriteListPage />} />
                         </Route>
                     </Routes>
                 </Suspense>

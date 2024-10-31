@@ -1,5 +1,5 @@
 // fetchMedia.ts
-import { FilmResponseType } from '@/types';
+import { FavoriteFilm, FilmResponseType } from '@/types';
 import apiClient from '../../network/axios';
 import { MediaType } from '../../services/media/lib/type';
 
@@ -20,4 +20,22 @@ export const fetchMedia = async ({ mediaType, searchTerm, pageParam = 1 }: Fetch
     const filmList: Array<FilmResponseType> = response.data.results;
 
     return filmList;
+};
+
+export const getFavoriteFilm = async (mediaType: MediaType, page: number) => {
+    const response = await apiClient.get(`/account/21503311/favorite/${mediaType}s?page=${page}`);
+    const favoriteFilmList: Array<FavoriteFilm> = response.data.results;
+
+    if (!favoriteFilmList) throw new Error('Not Found Data');
+
+    return favoriteFilmList;
+};
+
+export const getGenres = async (mediaType: MediaType) => {
+    const response = await apiClient.get(`/genre/${mediaType}/list`);
+    const favoriteFilmList: Array<{ id: number; name: string }> = response.data.genres;
+
+    if (!favoriteFilmList) throw new Error('Not Found Data');
+
+    return favoriteFilmList;
 };

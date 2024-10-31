@@ -50,6 +50,7 @@ export const Button: FC<ButtonProps> = ({
                     className,
                 )}
                 to={to}
+                replace
             >
                 {icon}
                 {text}

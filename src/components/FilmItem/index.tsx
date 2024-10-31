@@ -34,18 +34,16 @@ const FilmItem: React.FC<FilmItemProps> = ({
 
     // Toggle favorite status
     const toggleFavorite = async (e: React.MouseEvent) => {
-        console.log('Click thêm favourite');
         e.stopPropagation();
         try {
-            const response = await apiClient.post('/account/21535262/favorite', {
-                media_type:media_type,
+            await apiClient.post('/account/21535262/favorite', {
+                media_type: media_type,
                 media_id: id,
                 favorite: !isFavorite,
             });
-            setIsFavorite(!isFavorite); // Toggle favorite state on successful request
-            console.log('Click thêm favourite',response);
-        } catch (error) {
-            console.error('Error updating favorite:', error);
+            setIsFavorite(!isFavorite);
+        } catch {
+            throw new Error('Not Active');
         }
     };
 
@@ -72,13 +70,13 @@ const FilmItem: React.FC<FilmItemProps> = ({
                     />
 
                     {/* Heart icon for favorite functionality */}
-                    <button 
+                    <button
                         className="absolute top-3 right-3 p-1 rounded-full transition hover:bg-red-500"
                         onClick={toggleFavorite}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            fill={isFavorite ? "red" : "currentColor"} 
+                            fill={isFavorite ? 'red' : 'currentColor'}
                             viewBox="0 0 24 24"
                             width="24"
                             height="24"
@@ -88,7 +86,7 @@ const FilmItem: React.FC<FilmItemProps> = ({
                         </svg>
                     </button>
                 </div>
-                
+
                 <h3 className="font-medium text-left text-white text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover:text-red-main">
                     {title}
                 </h3>
