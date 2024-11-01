@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useFavoriteStore } from '@/store/favoriteStore';
 
 // App
 import Config from '@/configuration';
@@ -13,6 +15,10 @@ import { useFilmQuery } from './queries/useFilmQuery';
 import { fetchMovieTrailer } from '../../services/movies/moviesServices';
 import TrailerModal from './components/Modal/TrailerModal';
 import FilmSection from './components/FilmSection/FilmSection';
+import { getFavoriteMedia } from '@/services/media/mediaService';
+
+//Types
+import { MediaType } from '@/services/media/lib/type';
 
 // Component
 const HomePage: React.FC = () => {
@@ -26,6 +32,58 @@ const HomePage: React.FC = () => {
     const { data: topRatedFilmList } = useFilmQuery('top_rated', 'movie');
     const { data: trendingTVFilmList } = useFilmQuery('trending', 'tv');
     const { data: topRatedTVFilmList } = useFilmQuery('top_rated', 'tv');
+
+// Lấy danh sách yêu thích phim (movie)
+const { data: favouriteMovieList } = useInfiniteQuery({
+    queryKey: ['film', 'favorite', 'movie'],
+    queryFn: async ({ pageParam = 1 }) => {
+        const response = await getFavoriteMedia(MediaType.Movie, pageParam);
+
+        // Chỉ lấy id và media_type
+        const favoriteMovies = response ? response.map(item => ({ id: item.id, media_type: "movie" })) : [];
+
+        // Đẩy chỉ id và media_type vào store Zustand
+        favoriteMovies.forEach(item => useFavoriteStore.getState().addFavorite(item));
+
+        return favoriteMovies;
+    },
+    getNextPageParam: (lastPage, pages) => {
+        if (lastPage && lastPage.length < 20) {
+            return undefined;
+        }
+        return pages.length + 1;
+    },
+    initialPageParam: 1,
+});
+
+
+// Lấy danh sách yêu thích TV
+const { data: favouriteTVList } = useInfiniteQuery({
+    queryKey: ['film', 'favorite', 'tv'],
+    queryFn: async ({ pageParam = 1 }) => {
+        const response = await getFavoriteMedia(MediaType.TV, pageParam);
+
+        // Chỉ lấy id và media_type
+        const favoriteTVs = response ? response.map(item => ({ id: item.id, media_type: "tv" })) : [];
+
+        // Đẩy chỉ id và media_type vào store Zustand
+        favoriteTVs.forEach(item => useFavoriteStore.getState().addFavorite(item));
+
+        return favoriteTVs;
+    },
+    getNextPageParam: (lastPage, pages) => {
+        if (lastPage && lastPage.length < 20) {
+            return undefined;
+        }
+        return pages.length + 1;
+    },
+    initialPageParam: 1,
+});
+    
+
+console.log(useFavoriteStore.getState().favoriteList)
+
+    
 
     // Query to fetch trailer based on videoId
     const { data: videos = [], error: videosError } = useQuery({
@@ -62,6 +120,7 @@ const HomePage: React.FC = () => {
                         .slice(0, 4)
                         .map((movie) => (
                             <FilmSlide
+                                key={movie.id}
                                 id={movie.id}
                                 title={movie.original_title}
                                 description={movie.overview}
