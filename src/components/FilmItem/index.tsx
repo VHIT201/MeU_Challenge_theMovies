@@ -86,6 +86,7 @@ const FilmItem: React.FC<FilmItemProps> = ({
                     />
 
                     {/* Heart icon for favorite functionality */}
+
                     <button
                         className="absolute top-3 right-3 p-1 rounded-full transition hover:bg-red-500"
                         onClick={toggleFavorite}
@@ -102,6 +103,7 @@ const FilmItem: React.FC<FilmItemProps> = ({
                         </svg>
                     </button>
                 </div>
+
 
                 <h3 className="font-medium text-left text-white text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover:text-red-main">
                     {title}

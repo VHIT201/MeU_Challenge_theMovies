@@ -7,11 +7,11 @@ import 'react-loading-skeleton/dist/skeleton.css';
 // App
 import { fetchMedia } from '@/services/media/mediaService';
 import { MediaType } from '@/services/media/lib/type';
-import SearchForm from '@/components/SearchForm';
 import Spinner from '@/components/Spinner/Spinner';
 
 // Internal
 import { FilmList } from './components/FilmList';
+import { SearchForm } from '@/components/SearchForm';
 
 const MediaPage = () => {
     // Lấy từ khóa tìm kiếm từ URL query string

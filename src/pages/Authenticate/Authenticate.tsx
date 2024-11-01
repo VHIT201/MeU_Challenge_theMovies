@@ -23,6 +23,7 @@ function Authenticate() {
     };
 
     return (
+
         <div
             className="w-full min-h-screen flex justify-center items-center relative"
             style={{
@@ -33,6 +34,7 @@ function Authenticate() {
             }}
         >
             <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+
 
             <div className="relative z-10">
                 <Components.Container>
@@ -45,6 +47,7 @@ function Authenticate() {
                             <Components.Button>Sign Up</Components.Button>
                         </Components.Form>
                     </Components.SignUpContainer>
+
 
                     <Components.SignInContainer signinIn={signIn}>
                         <Components.Form onSubmit={handleSignIn}>
@@ -67,6 +70,7 @@ function Authenticate() {
                         </Components.Form>
                     </Components.SignInContainer>
 
+
                     <Components.OverlayContainer signinIn={signIn}>
                         <Components.Overlay signinIn={signIn}>
                             <Components.LeftOverlayPanel signinIn={signIn}>
@@ -75,13 +79,16 @@ function Authenticate() {
                                     To keep connected with us please login with your personal info
                                 </Components.Paragraph>
                                 <Components.GhostButton onClick={() => toggle(true)}>Sign In</Components.GhostButton>
+                                <Components.GhostButton onClick={() => toggle(true)}>Sign In</Components.GhostButton>
                             </Components.LeftOverlayPanel>
+
 
                             <Components.RightOverlayPanel signinIn={signIn}>
                                 <Components.Title>Hello, Friend!</Components.Title>
                                 <Components.Paragraph>
                                     Enter your personal details and start your journey with us
                                 </Components.Paragraph>
+                                <Components.GhostButton onClick={() => toggle(false)}>Sign Up</Components.GhostButton>
                                 <Components.GhostButton onClick={() => toggle(false)}>Sign Up</Components.GhostButton>
                             </Components.RightOverlayPanel>
                         </Components.Overlay>

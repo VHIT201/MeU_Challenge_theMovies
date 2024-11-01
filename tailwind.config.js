@@ -5,6 +5,7 @@ export default {
         extend: {
             colors: {
                 'red-main': 'rgb(229, 9, 20)',
+                'black-main': 'rgb(15, 15, 15)',
             },
             keyframes: {
                 fallDown: {

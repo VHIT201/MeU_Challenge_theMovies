@@ -8,7 +8,6 @@ import { useFavoriteStore } from '@/store/favoriteStore';
 // App
 import Config from '@/configuration';
 import { Carousel } from '@/components/Carousel';
-import FilmSlide from '@/components/FilmSlide';
 
 // Internal
 import { useFilmQuery } from './queries/useFilmQuery';
@@ -16,6 +15,7 @@ import { fetchMovieTrailer } from '../../services/movies/moviesServices';
 import TrailerModal from './components/Modal/TrailerModal';
 import FilmSection from './components/FilmSection/FilmSection';
 import { getFavoriteMedia } from '@/services/media/mediaService';
+import { FilmSlide } from '@/components';
 
 //Types
 import { MediaType } from '@/services/media/lib/type';
@@ -113,14 +113,14 @@ console.log(useFavoriteStore.getState().favoriteList)
     }
 
     return (
-        <main className="w-full flex flex-col items-center justify-start gap bg-black">
+        <main className="w-full flex flex-col items-center justify-start gap bg-black-main">
             <Carousel loop className="w-full mb-0 p-0">
                 {trendingFilmList ? (
                     trendingFilmList
                         .slice(0, 4)
                         .map((movie) => (
                             <FilmSlide
-                                key={movie.id}
+                                
                                 id={movie.id}
                                 title={movie.original_title}
                                 description={movie.overview}
@@ -130,7 +130,7 @@ console.log(useFavoriteStore.getState().favoriteList)
                                 onWatchTrailer={() => handleWatchTrailer(movie.id)}
                             />
                         ))
-                ) : (
+                ) : (   
                     <></>
                 )}
             </Carousel>

@@ -35,7 +35,12 @@ const FilmDetailMainView: React.FC = () => {
     const error = filmDetailsError || videosError || similarFilmsError || creditsError;
 
     if (!id || !media_type) return <div>Movie information not available.</div>;
-    if (loading) return <div className="spinner" aria-label="Loading..." />;
+    if (loading)
+        return (
+            <div className="w-full h-screen flex justify-center items-center">
+                <div className="spinner" aria-label="Loading..." />
+            </div>
+        );
     if (error) return <div>Error loading movie details.</div>;
     if (!filmDetails) return <div>No details available</div>;
 

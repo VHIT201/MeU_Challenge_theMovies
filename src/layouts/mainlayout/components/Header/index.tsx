@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchUserInfo } from '@/services/user/userService';
 import { User } from '@/types';
 import { Images } from '../../../../assets/images';
+import { Drawer } from '@/components';
 
 const NavigationLinks = () => (
     <div className="fixed md:relative left-0 md:left-auto right-0 md:right-auto bottom-0 md:bottom-auto flex items-center justify-evenly bg-black md:bg-transparent py-2 md:py-4 -mx-4">

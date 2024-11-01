@@ -4,7 +4,7 @@ import { ENDPOINTS } from './lib/constant';
 import apiClient from '../../network/axios';
 import { FilmResponseType } from '@/types';
 
-export const fetchFilm = async (type: 'trending' | 'top_rated', category: 'movie' | 'tv') => {
+export const fetchFilm = async (type: 'trending' | 'top_rated' | 'popular', category: 'movie' | 'tv') => {
     try {
         const endpoint = ENDPOINTS[type][category];
         const response = await apiClient.get(endpoint);

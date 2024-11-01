@@ -13,6 +13,7 @@ import { ComponentProps } from '@/types';
 
 type CarouselProps = SwiperProps &
     ComponentProps & {
+        childWidth?: string;
         children: React.ReactElement[] | React.ReactElement;
     };
 
@@ -21,9 +22,11 @@ const Carousel: FC<CarouselProps> = ({
     breakpoints,
     autoplay,
     effect,
+    navigation,
     coverflowEffect,
     centeredSlides,
     pagination,
+    childWidth,
     className,
     children,
     ...props
@@ -38,16 +41,18 @@ const Carousel: FC<CarouselProps> = ({
             effect={effect}
             coverflowEffect={coverflowEffect}
             centeredSlides={centeredSlides}
+            navigation={navigation}
             modules={[
                 ...(coverflowEffect ? [EffectCoverflow] : []),
                 ...(autoplay ? [Autoplay] : []),
                 ...(pagination ? [Pagination] : []),
+                ...(navigation ? [Navigation] : []),
             ]}
             {...props}
         >
             {Array.isArray(children) ? (
                 children.map((slide) => (
-                    <SwiperSlide style={{ width: '800px' }} key={'slide' + slide.key}>
+                    <SwiperSlide style={{ width: childWidth }} key={'slide' + slide.key}>
                         {React.cloneElement(slide)}
                     </SwiperSlide>
                 ))
