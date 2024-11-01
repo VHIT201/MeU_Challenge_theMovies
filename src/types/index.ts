@@ -164,3 +164,12 @@ export interface User {
     include_adult: boolean;
     username: string;
   }
+
+  export interface FavoriteFilm {
+    id: string;
+    backdrop_path: string;
+    title: string;
+    overview: string;
+    genre_ids: Array<number>;
+    
+}
