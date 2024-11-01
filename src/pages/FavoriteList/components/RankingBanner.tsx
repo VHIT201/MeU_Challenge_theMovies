@@ -5,7 +5,7 @@ import { FC } from 'react';
 
 interface RankingBannerProps {
     rank: number;
-    title: string;
+    title: string | undefined;
     backDrop: string;
 }
 

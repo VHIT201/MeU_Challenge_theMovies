@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 // App
 import { ComponentProps } from '../types';
 import { cn } from '@/utils';
-import Spinner from './Spinner/Spinner';
+import { Spinner } from './Spinner/Spinner';
 
 // Type
 interface ButtonProps extends ComponentProps {

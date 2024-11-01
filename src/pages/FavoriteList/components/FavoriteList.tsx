@@ -1,18 +1,25 @@
 import React, { FC, useMemo } from 'react';
 import { FavoriteCard, FavoriteCardProps } from './FavoriteCard';
 import { FavoriteFilm } from '@/types';
-import { InfiniteData, useQuery } from '@tanstack/react-query';
+import { InfiniteData, InfiniteQueryObserverResult, useQuery } from '@tanstack/react-query';
 import { MediaType } from '@/services/media/lib/type';
 import { getGenres } from '@/services/media/mediaService';
 
 interface FavoriteListProps {
     filmList: InfiniteData<FavoriteFilm[]>;
+    isFetchingNextPage: boolean;
+    hasNextPage: boolean;
+    fetchNextPage: () => Promise<InfiniteQueryObserverResult<InfiniteData<FavoriteFilm[], unknown>, Error>>;
     mediaType: MediaType;
 }
 
-const FavoriteList: FC<FavoriteListProps> = ({ filmList, mediaType }) => {
-    const pageTitle = mediaType === MediaType.Movie ? 'Movies' : 'TV Series';
-
+const FavoriteList: FC<FavoriteListProps> = ({
+    filmList,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    mediaType,
+}) => {
     const { data: genres } = useQuery({
         queryKey: ['genres'],
         queryFn: () => getGenres(mediaType),
@@ -33,10 +40,7 @@ const FavoriteList: FC<FavoriteListProps> = ({ filmList, mediaType }) => {
     }, [filmList, genres, mediaType]);
 
     return (
-        <div>
-            <h1 className="mt-16 mb-8 text-4xl text-center text-white font-bold tracking-normal">
-                Favorite {pageTitle}
-            </h1>
+        <>
             <div className="grid grid-cols-3 gap-8">
                 {favoriteFilmList.map((film) => (
                     <FavoriteCard
@@ -50,7 +54,20 @@ const FavoriteList: FC<FavoriteListProps> = ({ filmList, mediaType }) => {
                     />
                 ))}
             </div>
-        </div>
+            <div className="text-center mt-8">
+                {isFetchingNextPage ? (
+                    <div className="h-[20vh] flex justify-center items-center">
+                        <span className="text-xl opacity-60">Loading more, please wait</span>
+                    </div>
+                ) : hasNextPage ? (
+                    <button onClick={fetchNextPage} className="btn-sm btn-default" disabled={isFetchingNextPage}>
+                        Load More
+                    </button>
+                ) : (
+                    <span className="text-lg text-white font-semibold opacity-60">No more items to load</span>
+                )}
+            </div>
+        </>
     );
 };
 

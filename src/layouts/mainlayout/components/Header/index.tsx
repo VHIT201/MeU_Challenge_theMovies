@@ -108,17 +108,21 @@ const Header: React.FC = () => {
                 className="text-white bg-gradient-to-b from-black via-[#1a1a1a] to-[#262626]"
                 isOpen={isDrawerOpen}
                 onClose={toggleDrawer}
-                title="User Information"
+                title={userInfo?.username}
             >
                 <ul className="text-xl text-white font-semibold divide-y-[1px]" onClick={toggleDrawer}>
-                    <li className="py-4 transition-all hover:bg-white hover:text-black cursor-pointer">Profile</li>
-                    <li className="py-4 transition-all hover:bg-white hover:text-black cursor-pointer">
+                    <li className="py-4 transition-all duration-300 hover:bg-white hover:text-red-main cursor-pointer">
+                        Profile
+                    </li>
+                    <li className="py-4 transition-all duration-300 hover:bg-white hover:text-red-main cursor-pointer">
                         <Link to={'movie/favorite'}>Favorite Movies</Link>
                     </li>
-                    <li className="py-4 transition-all hover:bg-white hover:text-black cursor-pointer">
+                    <li className="py-4 transition-all duration-300 hover:bg-white hover:text-red-main cursor-pointer">
                         <Link to={'tv/favorite'}>Favorite TVSeries</Link>
                     </li>
-                    <li className="py-4 transition-all hover:bg-white hover:text-black cursor-pointer">Log Out</li>
+                    <li className="py-4 transition-all duration-300 hover:bg-white hover:text-red-main cursor-pointer">
+                        Log Out
+                    </li>
                 </ul>
             </Drawer>
         </>

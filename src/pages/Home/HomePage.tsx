@@ -6,13 +6,13 @@ import { useQuery } from '@tanstack/react-query';
 // App
 import Config from '@/configuration';
 import { Carousel } from '@/components/Carousel';
-import FilmSlide from '@/components/FilmSlide';
 
 // Internal
 import { useFilmQuery } from './queries/useFilmQuery';
 import { fetchMovieTrailer } from '../../services/movies/moviesServices';
 import TrailerModal from './components/Modal/TrailerModal';
 import FilmSection from './components/FilmSection/FilmSection';
+import { FilmSlide } from '@/components';
 
 // Component
 const HomePage: React.FC = () => {
@@ -55,7 +55,7 @@ const HomePage: React.FC = () => {
     }
 
     return (
-        <main className="w-full flex flex-col items-center justify-start gap bg-black">
+        <main className="w-full flex flex-col items-center justify-start gap bg-black-main">
             <Carousel loop className="w-full mb-0 p-0">
                 {trendingFilmList ? (
                     trendingFilmList

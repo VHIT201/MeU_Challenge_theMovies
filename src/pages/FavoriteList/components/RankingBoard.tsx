@@ -18,10 +18,10 @@ const RankingBoard: FC<RankingBoardProps> = ({ filmList, mediaType }) => {
                 <thead>
                     <tr className="text-xl font-semibold">
                         <th className="text-lg text-gray-500">#</th>
-                        <th>Films</th>
-                        <th>WEEKS IN TOP 10</th>
-                        <th>HOURS VIEWED</th>
-                        <th>VIEWS</th>
+                        <th>FILM</th>
+                        <th>SCORE AVERAGE</th>
+                        <th>VOTE COUNT</th>
+                        <th>POPULARITY</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,10 +30,10 @@ const RankingBoard: FC<RankingBoardProps> = ({ filmList, mediaType }) => {
                             <td className="text-gray-500">{index + 1}</td>
                             <td>{mediaType === 'movie' ? film.title : film.name}</td>
                             <td className="flex justify-center">
-                                <StackWeekend stackNumber={1} />
+                                <StackWeekend stackNumber={film.vote_average ?? 0} />
                             </td>
-                            <td>25,600,000</td>
-                            <td className="text-xl font-bold">16,900,000</td>
+                            <td>{film.vote_count}</td>
+                            <td className="text-xl font-bold">{film.popularity}</td>
                         </tr>
                     ))}
                 </tbody>

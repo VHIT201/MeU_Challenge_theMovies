@@ -11,6 +11,7 @@ export const fetchFilm = async (type: 'trending' | 'top_rated' | 'popular', cate
         const filmList: Array<FilmResponseType> = response.data.results;
         return filmList;
     } catch (error) {
+        console.error('Failed to fetch film data:', error);
         throw error;
     }
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Carousel } from '@/components/Carousel';
 import { RankingBoard } from './components/RankingBoard';
 import { FavoriteList } from './components/FavoriteList';
@@ -7,16 +7,26 @@ import { MediaType } from '@/services/media/lib/type';
 import { getFavoriteFilm } from '@/services/media/mediaService';
 import { useFilmQuery } from '../Home/queries/useFilmQuery';
 import { RankingBanner } from './components/RankingBanner';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Images } from '@/assets/images';
+import { SearchForm } from '@/components/SearchForm';
 
 const FavoriteListPage = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const searchTerm = searchParams.get('query') || '';
+
     const params = useParams<{ media_type: string }>();
     const mediaType = params.media_type === MediaType.TV ? MediaType.TV : MediaType.Movie;
+    const pageTitle = mediaType === MediaType.Movie ? 'Movies' : 'TV Series';
 
     const { data: filmRankingList } = useFilmQuery('popular', mediaType);
 
-    const { data: filmList } = useInfiniteQuery({
+    const {
+        data: filmList,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
         queryKey: ['film', 'favorite', mediaType],
         queryFn: async ({ pageParam = 1 }) => {
             const response = await getFavoriteFilm(mediaType, pageParam);
@@ -32,8 +42,16 @@ const FavoriteListPage = () => {
         initialPageParam: 1,
     });
 
+    const handleSearch = useCallback(
+        (keyword: string) => {
+            const trimmedKeyword = keyword.trim();
+            setSearchParams(trimmedKeyword ? { query: trimmedKeyword } : {});
+        },
+        [setSearchParams],
+    );
+
     return (
-        <main className="mt-32 mb-16 px-32 space-y-16">
+        <main className="mt-32 mb-16 px-32 space-y-16 bg-black-main">
             <div className="w-[1000px] mx-auto">
                 <Carousel
                     loop={true}
@@ -57,7 +75,7 @@ const FavoriteListPage = () => {
                                 <RankingBanner
                                     key={film.id || index}
                                     rank={index + 1}
-                                    title={film.original_title ?? ''}
+                                    title={mediaType === 'movie' ? film.title : film.name}
                                     backDrop={film.backdrop_path ?? Images.noImage}
                                 />
                             ))
@@ -67,11 +85,25 @@ const FavoriteListPage = () => {
                 </Carousel>
             </div>
             <RankingBoard filmList={filmRankingList || []} mediaType={mediaType} />
-            {filmList ? (
-                <FavoriteList filmList={filmList} mediaType={mediaType} />
-            ) : (
-                <h1 className="py-4 text-4xl text-white font-bold">No Favorite Film</h1>
-            )}
+            <div>
+                <h1 className="mt-16 mb-8 text-4xl text-center text-white font-bold tracking-normal">
+                    Favorite {pageTitle}
+                </h1>
+                <div className="mb-8">
+                    <SearchForm initialKeyword={searchTerm} onSubmit={handleSearch} />
+                </div>
+                {filmList ? (
+                    <FavoriteList
+                        filmList={filmList}
+                        mediaType={mediaType}
+                        isFetchingNextPage={isFetchingNextPage}
+                        hasNextPage={hasNextPage}
+                        fetchNextPage={fetchNextPage}
+                    />
+                ) : (
+                    <h1 className="py-4 text-4xl text-white font-bold">No Favorite {pageTitle}</h1>
+                )}
+            </div>
         </main>
     );
 };
