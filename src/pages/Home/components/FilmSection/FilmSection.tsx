@@ -41,6 +41,7 @@ const FilmSection: React.FC<FilmSectionProps> = ({ viewMoreLink, mediaType, data
             >
                 {data.map((movie) => (
                     <FilmItem
+                        key={movie.id}
                         id={movie.id}
                         original_title={movie.original_title ?? ''}
                         original_name={movie.original_name ?? ''}
