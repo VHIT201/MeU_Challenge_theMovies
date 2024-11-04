@@ -1,67 +1,56 @@
-import React, { useCallback, memo, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiClient from '@/network/axios';
-import Config from '../../configuration';
-import { Images } from '../../assets/images';
-import { ComponentProps } from '@/types';
+
+// App
+import { Images } from '@/assets/images';
+import Config from '@/configuration';
+import apiClient from '@/lib/http';
 import { cn } from '@/utils';
 import { useFavoriteStore } from '@/store/favoriteStore';
 
-export interface FilmItemProps extends ComponentProps {
-    id: number;
-    original_title: string;
-    name: string;
-    original_name: string;
-    poster_path: string;
-    media_type: string;
-}
+// Internal
+import { FilmItemProps } from './lib/types';
 
-const FilmItem: React.FC<FilmItemProps> = ({
-    id,
-    original_title,
-    name,
-    original_name,
-    poster_path,
-    media_type,
-    className,
-}) => {
+// Component
+const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media_type, className }) => {
+    // Hooks
     const navigate = useNavigate();
-    const { isFavorite, addFavorite, removeFavorite } = useFavoriteStore(); // Sử dụng store
 
-    // State to manage image source
+    // States
     const [imageSrc, setImageSrc] = useState(poster_path ? `${Config.imgPath}${poster_path}` : Images.default_image);
 
-    // Check if the current item is a favorite
+    // Stores
+    const { isFavorite, addFavorite, removeFavorite } = useFavoriteStore(); // Sử dụng store
+
     const isFilmFavorite = isFavorite(id.toString()); // Kiểm tra trạng thái yêu thích từ store
 
-    const title = original_title || original_name || name;
+    const filmTitle = title || name;
 
+    // Functions
     const toggleFavorite = async (e: React.MouseEvent) => {
         e.stopPropagation();
         try {
             // Xác định trạng thái yêu thích mới dựa trên việc phần tử đã có trong danh sách yêu thích hay chưa
             const newFavoriteStatus = !isFilmFavorite;
-    
+
             // Gửi yêu cầu đến API để cập nhật trạng thái yêu thích
-            const response = await apiClient.post('/account/21535262/favorite', {
+            await apiClient.post('/account/21535262/favorite', {
                 media_type: media_type,
                 media_id: id,
                 favorite: newFavoriteStatus,
             });
-    
+
             // Cập nhật trạng thái yêu thích trong store
             if (newFavoriteStatus) {
                 addFavorite({ id: id.toString(), media_type }); // Thêm vào danh sách yêu thích
             } else {
                 removeFavorite(id.toString()); // Xóa khỏi danh sách yêu thích
             }
-    
         } catch (error) {
             console.error('Lỗi khi cập nhật trạng thái yêu thích:', error);
             // Có thể thêm thông báo lỗi cho người dùng ở đây nếu cần
         }
     };
-    
 
     const handleNavigate = useCallback(() => {
         navigate(`/${media_type}/${id}`);
@@ -71,6 +60,7 @@ const FilmItem: React.FC<FilmItemProps> = ({
         setImageSrc(Images.noImage);
     };
 
+    // Templates
     return (
         <div className={cn('px-2 w-full mb-8', className)}>
             <div className="hover:cursor-pointer group z-10 relative" onClick={handleNavigate}>
@@ -104,11 +94,11 @@ const FilmItem: React.FC<FilmItemProps> = ({
                 </div>
 
                 <h3 className="font-medium text-left text-white text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover:text-red-main">
-                    {title}
+                    {filmTitle}
                 </h3>
             </div>
         </div>
     );
 };
 
-export default memo(FilmItem);
+export default FilmItem;

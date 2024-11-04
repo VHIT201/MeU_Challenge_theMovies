@@ -1,17 +1,16 @@
 // Core
-import React, { useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSearchParams, useParams } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 // App
-import { fetchMedia } from '@/services/media/mediaService';
-import { MediaType } from '@/services/media/lib/type';
-import SearchForm from '@/components/SearchForm';
-import Spinner from '@/components/Spinner/Spinner';
+import { FeatureType, MediaType } from '@/types/media';
+import { getFilmList } from '@/services/media';
+import { SearchForm, Spinner } from '@/components';
 
 // Internal
-import { FilmList } from './components/FilmList';
+import FilmList from './components/FilmList/FilmList';
 
 const MediaPage = () => {
     // Lấy từ khóa tìm kiếm từ URL query string
@@ -21,7 +20,7 @@ const MediaPage = () => {
     // Lấy loại media từ URL params
     const params = useParams<{ media_type: string }>();
     const mediaType = params.media_type === MediaType.TV ? MediaType.TV : MediaType.Movie;
-    const pageTitle = useMemo(() => (mediaType === MediaType.Movie ? 'Movies' : 'TV Series'), [mediaType]);
+    const pageTitle = mediaType === MediaType.Movie ? 'Movies' : 'TV Series';
 
     // Fetch dữ liệu media
     const {
@@ -33,7 +32,12 @@ const MediaPage = () => {
     } = useInfiniteQuery({
         queryKey: ['film', mediaType, searchTerm],
         queryFn: async ({ pageParam = 1 }) => {
-            const response = await fetchMedia({ mediaType, searchTerm, pageParam });
+            const response = await getFilmList({
+                mediaType,
+                keyword: searchTerm,
+                page: pageParam,
+                type: FeatureType.Popular,
+            });
 
             return response ?? [];
         },

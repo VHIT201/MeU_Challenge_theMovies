@@ -1,10 +1,14 @@
+// Core
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { fetchUserInfo } from '@/services/user/userService';
-import { User } from '@/types';
-import { Images } from '../../../../assets/images';
 
+// App
+import { Images } from '@/assets/images';
+import { fetchUserInfo } from '@/services/user';
+import { User } from '@/types/user';
+
+// Component
 const NavigationLinks = () => (
     <div className="fixed md:relative left-0 md:left-auto right-0 md:right-auto bottom-0 md:bottom-auto flex items-center justify-evenly bg-black md:bg-transparent py-2 md:py-4 -mx-4">
         <div className="px-4">
@@ -25,16 +29,20 @@ const NavigationLinks = () => (
     </div>
 );
 
+// Component
 const Header: React.FC = () => {
+    // State
     const [isScrolled, setIsScrolled] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+    // Queries
     const { data: userInfo } = useQuery<User>({
         queryKey: ['userInfo'],
         queryFn: fetchUserInfo,
         retry: false,
     });
 
+    // Effects
     useEffect(() => {
         const handleScroll = () => {
             const scrollY = window.scrollY;
@@ -53,6 +61,7 @@ const Header: React.FC = () => {
 
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
+    // Templates
     return (
         <div
             className={`px-8 flex justify-center fixed top-0 w-full z-50 transition-all duration-200 ease-in-out ${

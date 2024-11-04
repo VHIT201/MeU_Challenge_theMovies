@@ -18,14 +18,13 @@ dist-ssr
 *.local
 
 # Editor directories and files
-.vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
+*.slnc:\Users\User\Desktop\movie-app\the-movies\.vscode\settings.json
 *.sw?
 
 # Temporary files

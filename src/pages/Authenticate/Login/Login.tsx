@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import {auth} from '../../../network/firebase'
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -9,8 +8,6 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Gọi hàm đăng nhập của Firebase
-      await signInWithEmailAndPassword(auth, email, password);
       console.log('Logged in successfully');
     } catch (error) {
       setError('Invalid email or password');

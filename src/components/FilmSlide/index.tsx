@@ -1,7 +1,13 @@
+// Core
 import React, { useEffect, useRef, useState } from "react";
-import { FilmSlideProps } from "./lib/Type";
-import { Images } from "../../assets/images";
 
+// App
+import { Images } from "@/assets/images";
+
+// Internal
+import { FilmSlideProps } from "./lib/types";
+
+// Component
 const FilmSlide: React.FC<FilmSlideProps> = ({
   title,
   description,
@@ -9,11 +15,10 @@ const FilmSlide: React.FC<FilmSlideProps> = ({
   posterImage,
   onWatchNow,
   onWatchTrailer,
-  media_type,
 }) => {
   const slideRef = useRef<HTMLDivElement | null>(null);
 
-  // State: Handle image loading error for poster image
+  // State:
   const [posterSrc, setPosterSrc] = useState(posterImage || Images.default_image);
   const [bgImageSrc, setBgImageSrc] = useState(backgroundImage || Images.default_image);
 
@@ -27,6 +32,7 @@ const FilmSlide: React.FC<FilmSlideProps> = ({
     setBgImageSrc(Images.noImage); // Fallback to noImage if there's an error
   };
 
+  // Effect
   useEffect(() => {
     const slideElement = slideRef.current;
 
@@ -88,7 +94,7 @@ const FilmSlide: React.FC<FilmSlideProps> = ({
             <p className="font-medium text-white text-xs md:text-xl my-12 animated hidden text-left">
               {description}
             </p>
-            <div className="flex text-white animated hidden">
+            <div className="flex text-white animated">
               <button className="btn-lg btn-primary mr-4" onClick={onWatchNow}>
                 Watch now
               </button>

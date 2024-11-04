@@ -6,15 +6,14 @@ import { lazy, Suspense } from 'react';
 import './App.css';
 
 // Components
-import Spinner from './components/Spinner/Spinner';
-import MainLayout from './layouts/mainlayout/mainLayout';
+import Spinner from './components/Spinner';
 
 // Lazy loading pages
 
-
 import { HomePage, MediaPage, FilmDetailPage, FavoriteListPage } from './pages';
+import { MainLayout } from './layouts';
 
-const Authenticate = lazy(() => import("./pages/Authenticate/Authenticate"));
+const Authenticate = lazy(() => import('./pages/Authenticate/Authenticate'));
 
 function App() {
     return (

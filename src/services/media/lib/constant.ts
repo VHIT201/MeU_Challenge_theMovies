@@ -1,13 +1,11 @@
+const MAXIMUM_SHOW_CAST = 5;
+const MAXIMUM_SHOW_VIDEO = 5;
+const INCLUDE_ADULT = false;
+const LANGUAGE_DEFAULT = 'en-US';
 
-// Define media types as constants
-export const MEDIA_TYPE = {
-    MOVIE: 'movie' as const,
-    TV: 'tv' as const,
-  };
-  
-  // Define API endpoints as constants
-  export const API_ENDPOINTS = {
-    SEARCH: 'search',
-    POPULAR: 'popular',
-  };
-  
+export { 
+  MAXIMUM_SHOW_CAST,
+  MAXIMUM_SHOW_VIDEO,
+  INCLUDE_ADULT,
+  LANGUAGE_DEFAULT 
+};

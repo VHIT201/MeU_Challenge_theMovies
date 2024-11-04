@@ -7,18 +7,16 @@ import { useFavoriteStore } from '@/store/favoriteStore';
 
 // App
 import Config from '@/configuration';
-import { Carousel } from '@/components/Carousel';
-import FilmSlide from '@/components/FilmSlide';
+import { FeatureType, MediaType } from '@/types/media';
+import { Carousel, FilmSlide } from '@/components';
 
 // Internal
-import { useFilmQuery } from './queries/useFilmQuery';
-import { fetchMovieTrailer } from '../../services/movies/moviesServices';
+import { useFilmQuery } from './hooks/useFilmQuery';
 import TrailerModal from './components/Modal/TrailerModal';
 import FilmSection from './components/FilmSection/FilmSection';
-import { getFavoriteMedia } from '@/services/media/mediaService';
+import { getFavoriteMedia, getMovieTrailer } from '@/services/media';
 
 //Types
-import { MediaType } from '@/services/media/lib/type';
 
 // Component
 const HomePage: React.FC = () => {
@@ -28,67 +26,59 @@ const HomePage: React.FC = () => {
     const [videoId, setVideoId] = useState<string | null>(null);
 
     // Queries: Fetching data from the API using useQuery
-    const { data: trendingFilmList } = useFilmQuery('trending', 'movie');
-    const { data: topRatedFilmList } = useFilmQuery('top_rated', 'movie');
-    const { data: trendingTVFilmList } = useFilmQuery('trending', 'tv');
-    const { data: topRatedTVFilmList } = useFilmQuery('top_rated', 'tv');
+    const { data: trendingFilmList } = useFilmQuery(FeatureType.Popular, MediaType.Movie);
+    const { data: topRatedFilmList } = useFilmQuery(FeatureType.TopRated, MediaType.Movie);
+    const { data: trendingTVFilmList } = useFilmQuery(FeatureType.Popular, MediaType.TV);
+    const { data: topRatedTVFilmList } = useFilmQuery(FeatureType.TopRated, MediaType.TV);
 
-// Lấy danh sách yêu thích phim (movie)
-const { data: favouriteMovieList } = useInfiniteQuery({
-    queryKey: ['film', 'favorite', 'movie'],
-    queryFn: async ({ pageParam = 1 }) => {
-        const response = await getFavoriteMedia(MediaType.Movie, pageParam);
+    useInfiniteQuery({
+        queryKey: ['film', 'favorite', 'movie'],
+        queryFn: async ({ pageParam = 1 }) => {
+            const response = await getFavoriteMedia(MediaType.Movie, pageParam);
 
-        // Chỉ lấy id và media_type
-        const favoriteMovies = response ? response.map(item => ({ id: item.id, media_type: "movie" })) : [];
+            // Chỉ lấy id và media_type
+            const favoriteMovies = response ? response.map((item) => ({ id: item.id, media_type: 'movie' })) : [];
 
-        // Đẩy chỉ id và media_type vào store Zustand
-        favoriteMovies.forEach(item => useFavoriteStore.getState().addFavorite(item));
+            // Đẩy chỉ id và media_type vào store Zustand
+            favoriteMovies.forEach((item) => useFavoriteStore.getState().addFavorite(item));
 
-        return favoriteMovies;
-    },
-    getNextPageParam: (lastPage, pages) => {
-        if (lastPage && lastPage.length < 20) {
-            return undefined;
-        }
-        return pages.length + 1;
-    },
-    initialPageParam: 1,
-});
+            return favoriteMovies;
+        },
+        getNextPageParam: (lastPage, pages) => {
+            if (lastPage && lastPage.length < 20) {
+                return undefined;
+            }
+            return pages.length + 1;
+        },
+        initialPageParam: 1,
+    });
 
+    useInfiniteQuery({
+        queryKey: ['film', 'favorite', 'tv'],
+        queryFn: async ({ pageParam = 1 }) => {
+            const response = await getFavoriteMedia(MediaType.TV, pageParam);
 
-// Lấy danh sách yêu thích TV
-const { data: favouriteTVList } = useInfiniteQuery({
-    queryKey: ['film', 'favorite', 'tv'],
-    queryFn: async ({ pageParam = 1 }) => {
-        const response = await getFavoriteMedia(MediaType.TV, pageParam);
+            // Chỉ lấy id và media_type
+            const favoriteTVs = response ? response.map((item) => ({ id: item.id, media_type: 'tv' })) : [];
 
-        // Chỉ lấy id và media_type
-        const favoriteTVs = response ? response.map(item => ({ id: item.id, media_type: "tv" })) : [];
+            // Đẩy chỉ id và media_type vào store Zustand
+            favoriteTVs.forEach((item) => useFavoriteStore.getState().addFavorite(item));
 
-        // Đẩy chỉ id và media_type vào store Zustand
-        favoriteTVs.forEach(item => useFavoriteStore.getState().addFavorite(item));
-
-        return favoriteTVs;
-    },
-    getNextPageParam: (lastPage, pages) => {
-        if (lastPage && lastPage.length < 20) {
-            return undefined;
-        }
-        return pages.length + 1;
-    },
-    initialPageParam: 1,
-});
-    
-
-console.log(useFavoriteStore.getState().favoriteList)
-
-    
+            return favoriteTVs;
+        },
+        getNextPageParam: (lastPage, pages) => {
+            if (lastPage && lastPage.length < 20) {
+                return undefined;
+            }
+            return pages.length + 1;
+        },
+        initialPageParam: 1,
+    });
 
     // Query to fetch trailer based on videoId
     const { data: videos = [], error: videosError } = useQuery({
         queryKey: ['videos', videoId],
-        queryFn: () => fetchMovieTrailer(Number(videoId)),
+        queryFn: () => getMovieTrailer(Number(videoId)),
         enabled: !!videoId, // Only run the query if videoId is set
     });
 

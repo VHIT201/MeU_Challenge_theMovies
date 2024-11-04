@@ -1,10 +1,15 @@
+// Core
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
+
+// Internal
 import MovieDetailBanner from './components/Banner/MovieDetailBanner';
 import MovieDetailVideoSection from './components/MovieDetailVideoSection/MovieDetailVideoSection';
 import SimilarMoviesSection from './components/SimilarMovieSection/SimilarMovieSection';
-import { fetchFilmDetails, fetchCredits, fetchSimilarFilms, fetchVideos } from '../../services/detail/detailServices';
+
+// Components
+import { getCreditList, getFilmDetail, getSimilarFilmList, getVideoList } from '@/services/media';
 
 const FilmDetailMainView: React.FC = () => {
     const { id, media_type } = useParams<{ id: string; media_type: string }>();
@@ -14,22 +19,22 @@ const FilmDetailMainView: React.FC = () => {
         data: filmDetails,
         isLoading: isFilmDetailsLoading,
         error: filmDetailsError,
-    } = useQuery({ queryKey: ['filmDetails', urlBase], queryFn: () => fetchFilmDetails(urlBase) });
+    } = useQuery({ queryKey: ['filmDetails', urlBase], queryFn: () => getFilmDetail(urlBase) });
     const {
         data: videos,
         isLoading: isVideosLoading,
         error: videosError,
-    } = useQuery({ queryKey: ['videos', urlBase], queryFn: () => fetchVideos(urlBase) });
+    } = useQuery({ queryKey: ['videos', urlBase], queryFn: () => getVideoList(urlBase) });
     const {
         data: similarFilms,
         isLoading: isSimilarFilmsLoading,
         error: similarFilmsError,
-    } = useQuery({ queryKey: ['similarFilms', urlBase], queryFn: () => fetchSimilarFilms(urlBase) });
+    } = useQuery({ queryKey: ['similarFilms', urlBase], queryFn: () => getSimilarFilmList(urlBase) });
     const {
         data: credits,
         isLoading: isCreditsLoading,
         error: creditsError,
-    } = useQuery({ queryKey: ['credits', urlBase], queryFn: () => fetchCredits(urlBase) });
+    } = useQuery({ queryKey: ['credits', urlBase], queryFn: () => getCreditList(urlBase) });
 
     const loading = isFilmDetailsLoading || isVideosLoading || isSimilarFilmsLoading || isCreditsLoading;
     const error = filmDetailsError || videosError || similarFilmsError || creditsError;

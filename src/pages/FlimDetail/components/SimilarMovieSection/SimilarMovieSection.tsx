@@ -2,11 +2,10 @@
 import React from 'react';
 
 //Component
-import FilmItem from '../../../../components/FilmItem';
+import { Carousel, FilmItem } from '@/components';
 
-//Type
+//Internal
 import { SimilarMoviesSectionProps } from './lib/type';
-import { Carousel } from '@/components/Carousel';
 
 const SimilarMoviesSection: React.FC<SimilarMoviesSectionProps> = ({ similarFilms, media_type }) => {
     return (
@@ -32,8 +31,7 @@ const SimilarMoviesSection: React.FC<SimilarMoviesSectionProps> = ({ similarFilm
                         {similarFilms.map((movie) => (
                             <FilmItem
                                 id={movie.id}
-                                original_title={movie.original_title}
-                                original_name={movie.original_name}
+                                title={movie.title}
                                 name={movie.name}
                                 poster_path={movie.poster_path}
                                 media_type={media_type}

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Banner } from './components/Banner';
+import { Banner } from './components/Banner/Banner';
 import { Carousel } from '@/components/Carousel';
-import { RankingBoard } from './components/RankingBoard';
-import { FavoriteList } from './components/FavoriteList';
+import { RankingBoard } from './components/RankingBoard/RankingBoard';
+import { FavoriteList } from './components/FavoriteFilmList/FavoriteList';
 
 const FavoriteListPage = () => {
     return (

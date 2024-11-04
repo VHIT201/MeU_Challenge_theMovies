@@ -2,14 +2,13 @@
 import React from 'react';
 
 // App
-import 'react-loading-skeleton/dist/skeleton.css'; // Thêm CSS cho skeleton
+import 'react-loading-skeleton/dist/skeleton.css';
+import { FilmResponseType } from '@/types/media';
+import { Carousel, FilmItem } from '@/components';
 
 //Component
-import FilmItem from '../../../../components/FilmItem';
 
 //Types
-import { Carousel } from '@/components/Carousel';
-import { FilmResponseType } from '@/types';
 interface FilmSectionProps {
     // title: string;
     viewMoreLink: string;
@@ -43,8 +42,7 @@ const FilmSection: React.FC<FilmSectionProps> = ({ viewMoreLink, mediaType, data
                     <FilmItem
                         key={movie.id}
                         id={movie.id}
-                        original_title={movie.original_title ?? ''}
-                        original_name={movie.original_name ?? ''}
+                        title={movie.title ?? ''}
                         name={movie.name ?? ''}
                         poster_path={movie.poster_path ?? ''}
                         media_type={mediaType ?? ''}
