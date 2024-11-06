@@ -72,7 +72,7 @@ const MediaPage = () => {
 
             <div className="bg-black-main w-full px-4 md:px-8 py-8 xl:p-16">
                 <div className="max-w-screen-2xl mx-auto">
-                    <SearchForm initialKeyword={searchTerm} onSubmit={handleSearch} />
+                    <SearchForm onSubmit={handleSearch} />
                     {isLoading && (
                         <div className="flex flex-row items-center justify-center text-center text-white h-[50vh] gap-10">
                             <Spinner />

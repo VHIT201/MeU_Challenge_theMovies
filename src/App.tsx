@@ -24,7 +24,7 @@ function App() {
             element: <MainLayout />,
             children: [
                 {
-                    path: '/',
+                    path: '',
                     element: <HomePage />,
                 },
                 {
