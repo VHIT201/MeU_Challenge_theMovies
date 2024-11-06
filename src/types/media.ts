@@ -17,6 +17,7 @@ export type FilmType = {
     original_title?: string;
     id: number;
     name?: string;
+    title?: string;
     media_type?: string;
     origin_country?: string[];
     original_language?: string;

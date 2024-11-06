@@ -11,7 +11,7 @@ import SimilarMoviesSection from './components/SimilarMovieSection/SimilarMovieS
 // Components
 import { getCreditList, getFilmDetail, getSimilarFilmList, getVideoList } from '@/services/media';
 
-const FilmDetailMainView: React.FC = () => {
+const FilmDetailPage: React.FC = () => {
     const { id, media_type } = useParams<{ id: string; media_type: string }>();
     const urlBase = `${media_type}/${id}`;
 
@@ -53,4 +53,4 @@ const FilmDetailMainView: React.FC = () => {
     );
 };
 
-export default FilmDetailMainView;
+export default FilmDetailPage;

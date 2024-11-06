@@ -13,8 +13,6 @@ import { cn } from '@/utils';
 // Internal
 import { CarouselProps } from './lib/types';
 
-
-
 // Component
 const Carousel: FC<CarouselProps> = ({
     breakpoints,
@@ -24,6 +22,7 @@ const Carousel: FC<CarouselProps> = ({
     centeredSlides,
     pagination,
     navigation,
+    childWidth,
     className,
     children,
     ...props
@@ -48,7 +47,7 @@ const Carousel: FC<CarouselProps> = ({
         >
             {Array.isArray(children) ? (
                 children.map((slide) => (
-                    <SwiperSlide style={{ width: '800px' }} key={'slide' + slide.key}>
+                    <SwiperSlide style={{ width: childWidth }} key={'slide' + slide.key}>
                         {React.cloneElement(slide)}
                     </SwiperSlide>
                 ))

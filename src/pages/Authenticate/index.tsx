@@ -1,26 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import * as Components from './components/components';
+import SignUpForm from './SignUpForm';
+import SignInForm from './SignInForm';
 
-function Authenticate() {
+function AuthenticatePage() {
     const [signIn, toggle] = useState(true);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-
-    // Function to handle admin login
-    const handleAdminLogin = () => {
-        navigate('/home');
-    };
-
-    const handleSignIn = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (email === 'admin@gmail.com' && password === 'admin') {
-            handleAdminLogin();
-        } else {
-            alert('Sign in failed. Please check your credentials.');
-        }
-    };
 
     return (
         <div
@@ -37,34 +21,11 @@ function Authenticate() {
             <div className="relative z-10">
                 <Components.Container>
                     <Components.SignUpContainer signinIn={signIn}>
-                        <Components.Form>
-                            <Components.Title>Create Account</Components.Title>
-                            <Components.Input type="text" placeholder="Name" />
-                            <Components.Input type="email" placeholder="Email" />
-                            <Components.Input type="password" placeholder="Password" />
-                            <Components.Button>Sign Up</Components.Button>
-                        </Components.Form>
+                        <SignUpForm />
                     </Components.SignUpContainer>
 
                     <Components.SignInContainer signinIn={signIn}>
-                        <Components.Form onSubmit={handleSignIn}>
-                            <Components.Title>Sign in</Components.Title>
-                            <Components.Input
-                                type="email"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                            />
-                            <Components.Input
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                            />
-
-                            <Components.Anchor href="#">Forgot your password?</Components.Anchor>
-                            <Components.Button type="submit">Sign In</Components.Button>
-                        </Components.Form>
+                        <SignInForm />
                     </Components.SignInContainer>
 
                     <Components.OverlayContainer signinIn={signIn}>
@@ -92,4 +53,4 @@ function Authenticate() {
     );
 }
 
-export default Authenticate;
+export default AuthenticatePage;

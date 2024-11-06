@@ -1,36 +1,81 @@
-//Core
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+// Core
+import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom';
+import { Suspense } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 // CSS
 import './App.css';
-
-// Components
-import Spinner from './components/Spinner';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Lazy loading pages
-
-import { HomePage, MediaPage, FilmDetailPage, FavoriteListPage } from './pages';
+import { HomePage, MediaPage, FilmDetailPage, FavoriteListPage, AuthenticatePage } from './pages';
+import { MediaType } from './types/media';
 import { MainLayout } from './layouts';
+import { NotFound404, Spinner } from './components';
 
-const Authenticate = lazy(() => import('./pages/Authenticate/Authenticate'));
-
+// Components
 function App() {
+    const router = createBrowserRouter([
+        {
+            path: '/login',
+            element: <AuthenticatePage />,
+        },
+        {
+            element: <MainLayout />,
+            children: [
+                {
+                    path: '/',
+                    element: <HomePage />,
+                },
+                {
+                    path: '/:media_type',
+                    element: <MediaPage />,
+                    loader: async ({ params }) => {
+                        if (params.media_type !== MediaType.Movie && params.media_type !== MediaType.TV) {
+                            console.log('Redirecting to 404 page');
+                            throw redirect('/404');
+                        }
+                        return null;
+                    },
+                },
+                {
+                    path: '/:media_type/:id',
+                    element: <FilmDetailPage />,
+                    loader: async ({ params }) => {
+                        if (params.media_type !== MediaType.Movie && params.media_type !== MediaType.TV) {
+                            throw redirect('/404');
+                        }
+                        return null;
+                    },
+                },
+                {
+                    path: '/:media_type/favorite',
+                    element: <FavoriteListPage />,
+                    loader: async ({ params }) => {
+                        if (params.media_type !== MediaType.Movie && params.media_type !== MediaType.TV) {
+                            throw redirect('/404');
+                        }
+                        return null;
+                    },
+                },
+            ],
+        },
+        {
+            path: '/404',
+            element: <NotFound404 />,
+        },
+        {
+            path: '*',
+            element: <NotFound404 />,
+        },
+    ]);
+
     return (
-        <div className="app-container bg-black">
-            <Router>
-                <Suspense fallback={<Spinner />}>
-                    <Routes>
-                        <Route path="/" element={<Authenticate />} />
-                        <Route element={<MainLayout />}>
-                            <Route path="/home" element={<HomePage />} />
-                            <Route path="/:media_type" element={<MediaPage />} />
-                            <Route path="/:media_type/:id" element={<FilmDetailPage />} />
-                            <Route path="/favorite" element={<FavoriteListPage />} />
-                        </Route>
-                    </Routes>
-                </Suspense>
-            </Router>
+        <div className="app-container bg-black-main">
+            <Suspense fallback={<Spinner />}>
+                <RouterProvider router={router} />
+            </Suspense>
+            <ToastContainer />
         </div>
     );
 }

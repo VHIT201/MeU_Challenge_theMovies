@@ -14,25 +14,29 @@ export const useFavoriteStore = create<FavoriteStore>()(
     persist(
         (set, get) => ({
             favoriteList: [],
-            
+
             // Hàm thêm vào danh sách yêu thích, loại bỏ phần tử trùng nhau
-            addFavorite: (item) => set((state) => {
-                // Lọc ra các phần tử trùng lặp
-                const updatedList = state.favoriteList.filter(fav => !(fav.id === item.id && fav.media_type === item.media_type));
-                // Thêm phần tử mới vào danh sách đã lọc
-                return { favoriteList: [...updatedList, item] };
-            }),
-            
+            addFavorite: (item) =>
+                set((state) => {
+                    // Lọc ra các phần tử trùng lặp
+                    const updatedList = state.favoriteList.filter(
+                        (fav) => !(fav.id === item.id && fav.media_type === item.media_type),
+                    );
+                    // Thêm phần tử mới vào danh sách đã lọc
+                    return { favoriteList: [...updatedList, item] };
+                }),
+
             // Hàm xóa khỏi danh sách yêu thích
-            removeFavorite: (id) => set((state) => ({
-                favoriteList: state.favoriteList.filter((fav) => fav.id !== id)
-            })),
-            
+            removeFavorite: (id) =>
+                set((state) => ({
+                    favoriteList: state.favoriteList.filter((fav) => fav.id !== id),
+                })),
+
             // Hàm kiểm tra trạng thái yêu thích
-            isFavorite: (id) => get().favoriteList.some((fav) => fav.id === id)
+            isFavorite: (id) => get().favoriteList.some((fav) => fav.id === id),
         }),
         {
-            name: "favorite-storage", 
-        }
-    )
+            name: 'favorite-storage',
+        },
+    ),
 );
