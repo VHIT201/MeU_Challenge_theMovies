@@ -1,3 +1,4 @@
+import { Images } from '@/assets/images';
 import { useState } from 'react';
 
 const ImageUploader = () => {
@@ -17,17 +18,15 @@ const ImageUploader = () => {
 
     return (
         <div>
-            <div
-                className="min-h-[200px] h-full w-[200px] mt-4 rounded-3xl"
-                style={{
-                    backgroundImage:
-                        'url(https://images.pexels.com/photos/255379/pexels-photo-255379.jpeg?auto=compress&cs=tinysrgb&w=600)',
-                }}
-            ></div>
+            <img
+                src={imageSrc ?? Images.noImage}
+                className="min-h-[200px] max-h-[200px] h-full w-[200px] mt-4 rounded-3xl"
+            />
             <input
                 className="w-full mt-2 rounded-lg border-none outline-none text-white bg-blue-400"
                 type="file"
                 placeholder="Change"
+                onChange={handleFileChange}
             />
         </div>
     );
