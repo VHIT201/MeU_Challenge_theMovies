@@ -11,11 +11,14 @@ import { SearchForm, Spinner } from '@/components';
 
 // Internal
 import FilmList from './components/FilmList/FilmList';
+import { cn } from '@/utils';
+import useThemeStore from '@/store/themeStore';
 
 const MediaPage = () => {
     // Lấy từ khóa tìm kiếm từ URL query string
     const [searchParams, setSearchParams] = useSearchParams();
     const searchTerm = searchParams.get('query') || '';
+    const { isDarkMode } = useThemeStore();
 
     // Lấy loại media từ URL params
     const params = useParams<{ media_type: string }>();
@@ -36,7 +39,7 @@ const MediaPage = () => {
                 mediaType,
                 keyword: searchTerm,
                 page: pageParam,
-                type: FeatureType.Popular,
+                type: searchTerm ? undefined : FeatureType.Popular,
             });
 
             return response ?? [];
@@ -64,13 +67,23 @@ const MediaPage = () => {
     // Render component
     return (
         <main className="w-full flex flex-col items-center justify-start">
-            <div className="relative w-full h-48 bg-gradient-to-b from-white to-black">
-                <span className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 md:translate-y-0 text-white text-4xl font-bold z-10">
+            <div
+                className={cn(
+                    isDarkMode && 'dark',
+                    'relative w-full h-48 bg-gradient-to-b from-[#cccccc] to-white-main dark:from-white-main dark:to-black-main',
+                )}
+            >
+                <span className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 md:translate-y-0 text-white [text-shadow:_0_4px_4px_#999999] text-5xl font-bold z-10">
                     {pageTitle}
                 </span>
             </div>
 
-            <div className="bg-black-main w-full px-4 md:px-8 py-8 xl:p-16">
+            <div
+                className={cn(
+                    isDarkMode && 'dark',
+                    'bg-white-main dark:bg-black-main w-full px-4 md:px-8 py-8 xl:p-16',
+                )}
+            >
                 <div className="max-w-screen-2xl mx-auto">
                     <SearchForm onSubmit={handleSearch} />
                     {isLoading && (

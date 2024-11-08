@@ -8,7 +8,15 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Lazy loading pages
-import { HomePage, MediaPage, FilmDetailPage, FavoriteListPage, AuthenticatePage } from './pages';
+import {
+    HomePage,
+    MediaPage,
+    FilmDetailPage,
+    FavoriteListPage,
+    AuthenticatePage,
+    RankingPage,
+    ProfilePage,
+} from './pages';
 import { MediaType } from './types/media';
 import { MainLayout } from './layouts';
 import { NotFound404, Spinner } from './components';
@@ -24,7 +32,7 @@ function App() {
             element: <MainLayout />,
             children: [
                 {
-                    path: '',
+                    path: '/',
                     element: <HomePage />,
                 },
                 {
@@ -49,14 +57,16 @@ function App() {
                     },
                 },
                 {
-                    path: '/:media_type/favorite',
+                    path: '/favorite',
                     element: <FavoriteListPage />,
-                    loader: async ({ params }) => {
-                        if (params.media_type !== MediaType.Movie && params.media_type !== MediaType.TV) {
-                            throw redirect('/404');
-                        }
-                        return null;
-                    },
+                },
+                {
+                    path: '/ranking',
+                    element: <RankingPage />,
+                },
+                {
+                    path: '/profile',
+                    element: <ProfilePage />,
                 },
             ],
         },

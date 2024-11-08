@@ -1,24 +1,20 @@
-import { FeatureType, MediaType } from '@/types/media';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { useFilmQuery } from '../Home/hooks/useFilmQuery';
+import { MediaType } from '@/types/media';
+import { useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getFavoriteMedia } from '@/services/media';
-import { useCallback } from 'react';
-import { Carousel, SearchForm } from '@/components';
-import RankingBanner from './components/RankingBanner';
-import { RankingBoard } from './components';
+import { useCallback, useState } from 'react';
+import { ArrowDownUpIcon, Button, Popover, PopoverContent, SearchForm } from '@/components';
 import FavoriteFilmList from './components/FavoriteFilmList';
-import { Images } from '@/assets/images';
+import { cn } from '@/utils';
+import useThemeStore from '@/store/themeStore';
 
 const FavoriteListPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const searchTerm = searchParams.get('query') || '';
+    const { isDarkMode } = useThemeStore();
 
-    const params = useParams<{ media_type: string }>();
-    const mediaType = params.media_type === MediaType.TV ? MediaType.TV : MediaType.Movie;
-    const pageTitle = mediaType === MediaType.Movie ? 'Movies' : 'TV Series';
-
-    const { data: filmRankingList } = useFilmQuery(FeatureType.Popular, mediaType);
+    // States
+    const [mediaType, setMediaType] = useState<MediaType>(MediaType.Movie);
 
     const {
         data: filmList,
@@ -49,47 +45,56 @@ const FavoriteListPage = () => {
         [setSearchParams],
     );
 
+    const pageTitle = mediaType === MediaType.Movie ? 'Movies' : 'TVSeries';
+
     return (
-        <main className="mt-32 mb-16 px-32 space-y-16 bg-black-main">
-            <div className="w-[1000px] mx-auto">
-                <Carousel
-                    loop={true}
-                    effect={'coverflow'}
-                    grabCursor={true}
-                    centeredSlides={true}
-                    slidesPerView={'auto'}
-                    coverflowEffect={{
-                        rotate: 0,
-                        stretch: 0,
-                        depth: 150,
-                        modifier: 2.5,
-                        slideShadows: true,
-                    }}
-                    childWidth="800px"
-                >
-                    {filmRankingList ? (
-                        filmRankingList
-                            ?.slice(0, 10)
-                            .map((film, index) => (
-                                <RankingBanner
-                                    key={film.id || index}
-                                    rank={index + 1}
-                                    title={mediaType === 'movie' ? film.title : film.name}
-                                    backDrop={film.backdrop_path ?? Images.noImage}
-                                />
-                            ))
-                    ) : (
-                        <></>
-                    )}
-                </Carousel>
+        <main className="w-full bg-black-main">
+            <div
+                className={cn(
+                    isDarkMode && 'dark',
+                    'relative w-full h-48 bg-gradient-to-b from-[#cccccc] to-white-main dark:from-white-main dark:to-black-main',
+                )}
+            >
+                <span className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 md:translate-y-0 text-white text-4xl font-bold z-10">
+                    Favorite
+                </span>
             </div>
-            <RankingBoard filmList={filmRankingList || []} mediaType={mediaType} />
-            <div>
-                <h1 className="mt-16 mb-8 text-4xl text-center text-white font-bold tracking-normal">
-                    Favorite {pageTitle}
-                </h1>
-                <div className="mb-8">
+            <div
+                className={cn(
+                    isDarkMode && 'dark',
+                    'bg-white-main dark:bg-black-main w-full px-4 md:px-8 py-8 xl:p-16',
+                )}
+            >
+                <div className="flex justify-between items-center mb-8">
                     <SearchForm initialKeyword={searchTerm} onSubmit={handleSearch} />
+                    <Popover>
+                        <Button
+                            className="rounded-2xl"
+                            text="Movie"
+                            type="primary"
+                            size="lg"
+                            icon={<ArrowDownUpIcon className="mr-4 font-bold" width="20px" height="20px" />}
+                        />
+                        <PopoverContent
+                            position="bottom"
+                            className="-bottom-[100px] w-full rounded-xl bg-white shadow-sm z-20"
+                        >
+                            <ul>
+                                <li
+                                    className="rounded-t-xl px-2 py-3 text-lg font-semibold hover:bg-slate-300 cursor-pointer"
+                                    onClick={() => setMediaType(MediaType.Movie)}
+                                >
+                                    Movie
+                                </li>
+                                <li
+                                    className="rounded-b-xl px-2 py-3 text-lg font-semibold hover:bg-slate-300 cursor-pointer"
+                                    onClick={() => setMediaType(MediaType.TV)}
+                                >
+                                    TV
+                                </li>
+                            </ul>
+                        </PopoverContent>
+                    </Popover>
                 </div>
                 {filmList ? (
                     <FavoriteFilmList
@@ -100,7 +105,9 @@ const FavoriteListPage = () => {
                         fetchNextPage={fetchNextPage}
                     />
                 ) : (
-                    <h1 className="py-4 text-4xl text-white font-bold">No Favorite {pageTitle}</h1>
+                    <h1 className={cn(isDarkMode && 'dark', 'py-4 text-4xl text-black dark:text-white font-bold')}>
+                        No Favorite {pageTitle}
+                    </h1>
                 )}
             </div>
         </main>

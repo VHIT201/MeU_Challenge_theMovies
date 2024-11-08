@@ -5,3 +5,5 @@ export const FilmDetailPage = lazy(() => import('./FilmDetail'));
 export const MediaPage = lazy(() => import('./Media'));
 export const AuthenticatePage = lazy(() => import('./Authenticate'));
 export const FavoriteListPage = lazy(() => import('./Favorite'));
+export const RankingPage = lazy(() => import('./Ranking'));
+export const ProfilePage = lazy(() => import('./Profile'));

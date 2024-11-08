@@ -1,10 +1,31 @@
+import plugin from 'tailwindcss/plugin';
+
 /** @type {import('tailwindcss').Config} */
+const customClass = plugin(function ({ addUtilities }) {
+    addUtilities({
+        '.rotate-y-180': {
+            transform: 'rotateY(180deg)',
+        },
+        '.preserve-3d': {
+            transformStyle: 'preserve-3d',
+        },
+        '.perspective': {
+            perspective: '1000px',
+        },
+        '.backface-hidden': {
+            backfaceVisibility: 'hidden',
+        },
+    });
+});
+
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
         extend: {
             colors: {
                 'red-main': 'rgb(229, 9, 20)',
+                'black-main': '#0f0f0f',
+                'white-main': '#f2f2f2',
             },
             keyframes: {
                 fallDown: {
@@ -22,5 +43,6 @@ export default {
             },
         },
     },
-    plugins: [],
+    darkMode: 'selector',
+    plugins: [customClass],
 };

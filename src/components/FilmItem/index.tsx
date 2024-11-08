@@ -10,11 +10,13 @@ import { useFavoriteStore } from '@/store/favoriteStore';
 
 // Internal
 import { FilmItemProps } from './lib/types';
+import useThemeStore from '@/store/themeStore';
 
 // Component
 const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media_type, className }) => {
     // Hooks
     const navigate = useNavigate();
+    const { isDarkMode } = useThemeStore();
 
     // States
     const [imageSrc, setImageSrc] = useState(poster_path ? `${Config.imgPath}${poster_path}` : Images.default_image);
@@ -62,7 +64,7 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media
 
     // Templates
     return (
-        <div className={cn('px-2 w-full mb-8', className)}>
+        <div className={cn(isDarkMode && 'dark', 'px-2 w-full mb-8 text-black dark:text-white', className)}>
             <div className="hover:cursor-pointer group z-10 relative" onClick={handleNavigate}>
                 <div
                     className="relative w-full h-72 2xl:h-80 rounded-3xl bg-center bg-no-repeat bg-cover transition duration-300 group-hover:after:bg-black/60 animate-parallax"
@@ -93,7 +95,12 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media
                     </button>
                 </div>
 
-                <h3 className="font-medium text-left text-white text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover:text-red-main">
+                <h3
+                    className={cn(
+                        isDarkMode && 'dark',
+                        'font-medium text-left text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover:text-red-main text-black dark:text-white ',
+                    )}
+                >
                     {filmTitle}
                 </h3>
             </div>

@@ -12,15 +12,17 @@ import { Carousel, FilmSlide } from '@/components';
 
 // Internal
 import { useFilmQuery } from './hooks/useFilmQuery';
-import TrailerModal from './components/Modal/TrailerModal';
-import FilmSection from './components/FilmSection/FilmSection';
 import { getFavoriteMedia, getMovieTrailer } from '@/services/media';
+import { cn } from '@/utils';
+import useThemeStore from '@/store/themeStore';
+import { FilmSection, TrailerModal } from './components';
 
 //Types
 
 // Component
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
+    const { isDarkMode } = useThemeStore();
 
     //State
     const [videoId, setVideoId] = useState<string | null>(null);
@@ -103,7 +105,12 @@ const HomePage: React.FC = () => {
     }
 
     return (
-        <main className="w-full flex flex-col items-center justify-start gap bg-black">
+        <main
+            className={cn(
+                isDarkMode && 'dark',
+                'w-full flex flex-col items-center justify-start text-black dark:text-white bg-white-main dark:bg-black-main',
+            )}
+        >
             <Carousel loop className="w-full mb-0 p-0">
                 {trendingFilmList ? (
                     trendingFilmList

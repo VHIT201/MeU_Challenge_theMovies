@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { FavoriteCardProps } from '../FavoriteFilmCard/lib/types';
 import { FavoriteCard } from '../FavoriteFilmCard';
 import { getGenres } from '@/services/media';
+import useThemeStore from '@/store/themeStore';
+import { cn } from '@/utils';
 
 const FavoriteFilmList: FC<FavoriteListProps> = ({
     filmList,
@@ -12,6 +14,8 @@ const FavoriteFilmList: FC<FavoriteListProps> = ({
     fetchNextPage,
     mediaType,
 }) => {
+    const { isDarkMode } = useThemeStore();
+
     const { data: genres } = useQuery({
         queryKey: ['genres'],
         queryFn: () => getGenres(mediaType),
@@ -33,7 +37,7 @@ const FavoriteFilmList: FC<FavoriteListProps> = ({
 
     return (
         <>
-            <div className="grid grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
                 {favoriteFilmList.map((film) => (
                     <FavoriteCard
                         key={film.id}
@@ -56,7 +60,14 @@ const FavoriteFilmList: FC<FavoriteListProps> = ({
                         Load More
                     </button>
                 ) : (
-                    <span className="text-lg text-white font-semibold opacity-60">No more items to load</span>
+                    <span
+                        className={cn(
+                            isDarkMode && 'dark',
+                            'text-lg text-black dark:text-white font-semibold opacity-60',
+                        )}
+                    >
+                        No more items to load
+                    </span>
                 )}
             </div>
         </>
