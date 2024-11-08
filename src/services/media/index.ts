@@ -1,9 +1,11 @@
 //App
 import apiClient from '@/lib/http';
 import { FeatureType, FilmResponseType, FavoriteFilm, MediaType } from '@/types/media';
-
+import userAxios from '@/network/userAxios';
+import { useFavoriteStore } from '@/store/favoriteStore';
 // Internal
 import { INCLUDE_ADULT, LANGUAGE_DEFAULT } from './lib/constant';
+import { User } from '@/types/user';
 
 interface MediaParams {
     keyword?: string;
@@ -89,15 +91,35 @@ export const getCreditList = async (urlBase: string) => {
     return response.data;
 };
 
-export const getFavoriteMedia = async (mediaType: MediaType, page: number) => {
-    const mediaTypePath = mediaType === MediaType.TV ? 'tv' : `${mediaType}s`;
-    const response = await apiClient.get(`/account/21535262/favorite/${mediaTypePath}?page=${page}`);
+// export const getFavoriteMedia = async (mediaType: MediaType, page: number) => {
+//     const mediaTypePath = mediaType === MediaType.TV ? 'tv' : `${mediaType}s`;
+//     const response = await apiClient.get(`/account/21535262/favorite/${mediaTypePath}?page=${page}`);
 
-    const favoriteFilmList: Array<FavoriteFilm> = response.data.results;
+//     const favoriteFilmList: Array<FavoriteFilm> = response.data.results;
 
-    if (!favoriteFilmList) throw new Error('Not Found Data');
+//     if (!favoriteFilmList) throw new Error('Not Found Data');
 
-    return favoriteFilmList;
+//     return favoriteFilmList;
+// };
+
+export const getFavoriteMedia = async (userInfo: User) => {
+    try {
+        const response = await userAxios.get(`/favoritefilm/getfavoritefilmbyuserid?id=${userInfo.id}`);
+        console.log('Đây là favorite media : ', response);
+
+        const favoriteItems = response.data.data.map((item: { id: string; movieid: string; media_type: string }) => ({
+            id: item.movieid,
+            media_type: item.media_type,
+            mediaId: item.id,
+        }));
+
+        useFavoriteStore.setState({ favoriteList: favoriteItems });
+
+        return favoriteItems;
+    } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu yêu thích:', error);
+        throw error;
+    }
 };
 
 export const getGenres = async (mediaType: MediaType) => {

@@ -6,4 +6,5 @@ export interface FilmItemProps extends ComponentProps {
     title: string;
     poster_path: string;
     media_type: string;
+    mediaId?: string;
 }

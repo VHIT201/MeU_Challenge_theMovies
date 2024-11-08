@@ -33,49 +33,7 @@ const HomePage: React.FC = () => {
     const { data: trendingTVFilmList } = useFilmQuery(FeatureType.Popular, MediaType.TV);
     const { data: topRatedTVFilmList } = useFilmQuery(FeatureType.TopRated, MediaType.TV);
 
-    useInfiniteQuery({
-        queryKey: ['film', 'favorite', 'movie'],
-        queryFn: async ({ pageParam = 1 }) => {
-            const response = await getFavoriteMedia(MediaType.Movie, pageParam);
-
-            // Chỉ lấy id và media_type
-            const favoriteMovies = response ? response.map((item) => ({ id: item.id, media_type: 'movie' })) : [];
-
-            // Đẩy chỉ id và media_type vào store Zustand
-            favoriteMovies.forEach((item) => useFavoriteStore.getState().addFavorite(item));
-
-            return favoriteMovies;
-        },
-        getNextPageParam: (lastPage, pages) => {
-            if (lastPage && lastPage.length < 20) {
-                return undefined;
-            }
-            return pages.length + 1;
-        },
-        initialPageParam: 1,
-    });
-
-    useInfiniteQuery({
-        queryKey: ['film', 'favorite', 'tv'],
-        queryFn: async ({ pageParam = 1 }) => {
-            const response = await getFavoriteMedia(MediaType.TV, pageParam);
-
-            // Chỉ lấy id và media_type
-            const favoriteTVs = response ? response.map((item) => ({ id: item.id, media_type: 'tv' })) : [];
-
-            // Đẩy chỉ id và media_type vào store Zustand
-            favoriteTVs.forEach((item) => useFavoriteStore.getState().addFavorite(item));
-
-            return favoriteTVs;
-        },
-        getNextPageParam: (lastPage, pages) => {
-            if (lastPage && lastPage.length < 20) {
-                return undefined;
-            }
-            return pages.length + 1;
-        },
-        initialPageParam: 1,
-    });
+    console.log(useFavoriteStore.getState().favoriteList);
 
     // Query to fetch trailer based on videoId
     const { data: videos = [], error: videosError } = useQuery({

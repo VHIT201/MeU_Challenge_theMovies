@@ -4,13 +4,15 @@ import { useNavigate } from 'react-router-dom';
 // App
 import { Images } from '@/assets/images';
 import Config from '@/configuration';
-import apiClient from '@/lib/http';
 import { cn } from '@/utils';
 import { useFavoriteStore } from '@/store/favoriteStore';
+import { useUserStore } from '@/store/userStore';
+import userAxios from '@/network/userAxios';
 
 // Internal
 import { FilmItemProps } from './lib/types';
 import useThemeStore from '@/store/themeStore';
+import { getFavoriteMedia } from '@/services/media';
 
 // Component
 const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media_type, className }) => {
@@ -22,9 +24,11 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media
     const [imageSrc, setImageSrc] = useState(poster_path ? `${Config.imgPath}${poster_path}` : Images.default_image);
 
     // Stores
-    const { isFavorite, addFavorite, removeFavorite } = useFavoriteStore(); // Sử dụng store
+    const { isFavorite, addFavorite, removeFavorite } = useFavoriteStore();
+    const userInfo = useUserStore.getState().userInfo;
 
-    const isFilmFavorite = isFavorite(id.toString()); // Kiểm tra trạng thái yêu thích từ store
+    // Check if the film is in the favorite list
+    const isFilmFavorite = isFavorite(id.toString()); // Convert id to string
 
     const filmTitle = title || name;
 
@@ -32,25 +36,24 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media
     const toggleFavorite = async (e: React.MouseEvent) => {
         e.stopPropagation();
         try {
-            // Xác định trạng thái yêu thích mới dựa trên việc phần tử đã có trong danh sách yêu thích hay chưa
-            const newFavoriteStatus = !isFilmFavorite;
-
-            // Gửi yêu cầu đến API để cập nhật trạng thái yêu thích
-            await apiClient.post('/account/21535262/favorite', {
-                media_type: media_type,
-                media_id: id,
-                favorite: newFavoriteStatus,
-            });
-
-            // Cập nhật trạng thái yêu thích trong store
-            if (newFavoriteStatus) {
-                addFavorite({ id: id.toString(), media_type }); // Thêm vào danh sách yêu thích
+            if (!isFilmFavorite) {
+                const response = await userAxios.post('/favoritefilm/create', {
+                    media_type: media_type,
+                    movieid: id.toString(),
+                    userid: userInfo?.id,
+                });
+                if (response.status === 201) {
+                    // Gọi hàm addFavorite với đầy đủ thông tin
+                    addFavorite({ id: id.toString(), media_type, mediaId: id.toString() });
+                    if (userInfo) {
+                        await getFavoriteMedia(userInfo);
+                    }
+                }
             } else {
-                removeFavorite(id.toString()); // Xóa khỏi danh sách yêu thích
+                removeFavorite(id.toString());
             }
         } catch (error) {
             console.error('Lỗi khi cập nhật trạng thái yêu thích:', error);
-            // Có thể thêm thông báo lỗi cho người dùng ở đây nếu cần
         }
     };
 

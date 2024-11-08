@@ -3,9 +3,11 @@ import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
+import { loginUser, getInformation } from '@/services/user';
+import { getFavoriteMedia } from '@/services/media';
 
 const schemaForm = z.object({
-    email: z.string().email({ message: 'Email Invalid' }),
+    username: z.string().min(2, { message: 'Username must least 2 character' }),
     password: z.string().min(2, { message: 'Password must least 2 character' }),
 });
 
@@ -18,26 +20,32 @@ const SignInForm = () => {
         formState: { errors, isSubmitting },
     } = useForm<FormFields>({
         defaultValues: {
-            email: '',
+            username: '',
             password: '',
         },
         resolver: zodResolver(schemaForm),
     });
     const navigate = useNavigate();
 
-    const handleSignIn: SubmitHandler<FormFields> = (data) => {
-        if (data.email === 'admin@gmail.com' && data.password === 'admin') {
-            navigate('/home');
-        } else {
-            alert('Sign in failed. Please check your credentials.');
+    const handleSignIn: SubmitHandler<FormFields> = async (data) => {
+        try {
+            const token = await loginUser(data.username, data.password);
+            localStorage.setItem('userToken', token);
+            const userInfo = await getInformation(data.username);
+            await getFavoriteMedia(userInfo);
+            navigate('/');
+        } catch (error) {
+            alert('Đăng nhập thất bại: ' + (error instanceof Error ? error.message : 'Lỗi không xác định'));
         }
     };
 
     return (
         <Components.Form onSubmit={handleSubmit(handleSignIn)}>
             <Components.Title>Sign in</Components.Title>
-            <Components.Input type="email" placeholder="Email" {...register('email')} />
-            {errors.email && <span className="mb-2 text-md text-red-main font-semibold">{errors.email.message}</span>}
+            <Components.Input type="text" placeholder="Username" {...register('username')} />
+            {errors.username && (
+                <span className="mb-2 text-md text-red-main font-semibold">{errors.username.message}</span>
+            )}
             <Components.Input type="password" placeholder="Password" {...register('password')} />
             {errors.password && (
                 <span className="mb-2 text-md text-red-main font-semibold">{errors.password.message}</span>

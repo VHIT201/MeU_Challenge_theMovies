@@ -5,10 +5,10 @@ import { useQuery } from '@tanstack/react-query';
 
 // App
 import { Images } from '@/assets/images';
-import { fetchUserInfo } from '@/services/user';
-import { User } from '@/types/user';
 import { cn } from '@/utils';
 import useThemeStore from '@/store/themeStore';
+import { useUserStore } from '@/store/userStore'; // Import Zustand store
+
 import {
     HeartIcon,
     LogOutIcon,
@@ -47,13 +47,7 @@ const Header: React.FC = () => {
     // State
     const [isScrolled, setIsScrolled] = useState(false);
     const { isDarkMode } = useThemeStore();
-
-    // Queries
-    const { data: userInfo } = useQuery<User>({
-        queryKey: ['userInfo'],
-        queryFn: fetchUserInfo,
-        retry: false,
-    });
+    const { userInfo, clearUserInfo } = useUserStore(); // Lấy thông tin từ store Zustand
 
     // Effects
     useEffect(() => {
@@ -81,7 +75,7 @@ const Header: React.FC = () => {
                 isScrolled ? 'py-4 bg-white dark:bg-black-main' : 'py-0 md:py-8 bg-transparent',
             )}
         >
-            <div className="max-w-screen-2xl  flex justify-between items-center w-full">
+            <div className="max-w-screen-2xl flex justify-between items-center w-full">
                 <a className="hidden md:flex items-center hover:cursor-pointer group" href="/">
                     <img src={Images.logo} alt="Logo" className="mr-4 w-8 md:w-12" />
                     <h1 className="text-black dark:text-white font-semibold text-2xl md:text-4xl group-hover:text-red-main group-hover:transition-custom">
@@ -96,11 +90,11 @@ const Header: React.FC = () => {
                         {userInfo ? (
                             <Popover>
                                 <div className="flex flex-row justify-center gap-4 items-center">
-                                    <span className="text-black dark:text-white">{userInfo.username}</span>
+                                    <span className="text-black text-lg dark:text-white">{userInfo.username}</span>
                                     <img
-                                        src={`https://image.tmdb.org/t/p/w32_and_h32_face${userInfo.avatar.tmdb.avatar_path}`}
+                                        src={`https://images2.thanhnien.vn/528068263637045248/2024/4/3/jack-1712114239424422902059.jpg`}
                                         alt="User Avatar"
-                                        className="w-8 h-8 rounded-full cursor-pointer"
+                                        className="w-10 h-10 rounded-full object-cover cursor-pointer"
                                     />
                                 </div>
                                 <PopoverContent position="bottom">
@@ -109,7 +103,6 @@ const Header: React.FC = () => {
                                             to="/settings"
                                             className="flex items-center px-4 py-3 text-gray-800 rounded-t-md hover:bg-gray-100"
                                         >
-                                            {/* Placeholder for Icon */}
                                             <div className="w-5 h-5 mr-3 text-gray-600">
                                                 <SettingIcon width="20px" height="20px" />
                                             </div>
@@ -119,7 +112,6 @@ const Header: React.FC = () => {
                                             to="/help"
                                             className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-100"
                                         >
-                                            {/* Placeholder for Icon */}
                                             <div className="w-5 h-5 mr-3 text-gray-600">
                                                 <QuestionIcon width="20px" height="20px" />
                                             </div>
@@ -130,14 +122,12 @@ const Header: React.FC = () => {
                                             to="/favorite"
                                             className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-100"
                                         >
-                                            {/* Placeholder for Icon */}
                                             <div className="w-5 h-5 mr-3 text-gray-600">
                                                 <HeartIcon width="20px" height="20px" />
                                             </div>
                                             Favorite
                                         </NavLink>
                                         <div className="flex items-center space-x-4 px-4 py-3 text-gray-800 hover:bg-gray-100">
-                                            {/* Placeholder for Icon */}
                                             <div className="flex items-center text-gray-600 space-x-2">
                                                 {isDarkMode ? (
                                                     <MoonIcon width="20px" height="20px" />
@@ -152,9 +142,10 @@ const Header: React.FC = () => {
                                         </div>
                                         <button
                                             className="flex items-center w-full text-left px-4 py-3 mt-4 text-gray-800 border-[gray] border-t-[1px] rounded-b-md hover:bg-gray-100"
-                                            onClick={() => alert('Logged Out')}
+                                            onClick={() => {
+                                                clearUserInfo();
+                                            }}
                                         >
-                                            {/* Placeholder for Icon */}
                                             <div className="w-5 h-5 mr-3 text-gray-600">
                                                 <LogOutIcon width="20px" height="20px" />
                                             </div>
@@ -164,8 +155,8 @@ const Header: React.FC = () => {
                                 </PopoverContent>
                             </Popover>
                         ) : (
-                            <NavLink to="/authenticate" className="nav-item">
-                                Đăng nhập
+                            <NavLink to="/login" className="nav-item">
+                                <span className="text-lg">Đăng nhập</span>
                             </NavLink>
                         )}
                     </div>

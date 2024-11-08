@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import * as Components from './components/components';
-import SignUpForm from './SignUpForm';
 import SignInForm from './SignInForm';
+import { SignUpForm } from './SignUp/SignUp';
 
-function AuthenticatePage() {
+function Authenticate() {
     const [signIn, toggle] = useState(true);
 
     return (
@@ -53,4 +53,4 @@ function AuthenticatePage() {
     );
 }
 
-export default AuthenticatePage;
+export default Authenticate;
