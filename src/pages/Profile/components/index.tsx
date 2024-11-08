@@ -1,8 +1,9 @@
-import { PenSquareIcon } from '@/components';
+import { Button, PenSquareIcon } from '@/components';
 import Dialog, { DialogContent } from '@/components/Dialog';
 import useThemeStore from '@/store/themeStore';
 import { cn } from '@/utils';
 import React from 'react';
+import ImageUploader from './ImageUploader';
 
 const ProfileInfo = () => {
     const { isDarkMode } = useThemeStore();
@@ -20,7 +21,7 @@ const ProfileInfo = () => {
                 <div className="w-full h-52 bottom-0 flex space-x-4 px-4 bg-transparent">
                     <div className="w-52">
                         <div className="relative mb-16 w-52">
-                            <div className="absolute -top-24 left-0 w-52 h-52 p-2 rounded-full bg-white">
+                            <div className="absolute -top-24 left-0 w-52 h-52 p-2 rounded-full bg-white-main dark:bg-black-main">
                                 <img
                                     className="w-full h-full rounded-full"
                                     src="https://images.pexels.com/photos/1933873/pexels-photo-1933873.jpeg?auto=compress&cs=tinysrgb&w=600"
@@ -45,8 +46,27 @@ const ProfileInfo = () => {
                                     width="20px"
                                     height="20px"
                                 />
-                                <DialogContent>
-                                    <div className="w-80 h-96 bg-white rounded-3xl"></div>
+                                <DialogContent className="w-auto">
+                                    <div className="px-2">
+                                        <div className="flex items-center space-x-4">
+                                            <ImageUploader />
+                                            <div className="flex-1 w-full md:min-w-[400px]">
+                                                <div className="flex flex-col my-4">
+                                                    <input
+                                                        className="p-3 rounded-3xl border-gray-400 border-2 outline-none focus-within:border-blue-400"
+                                                        placeholder="Username"
+                                                    />
+                                                </div>
+                                                <div className="flex flex-col my-4">
+                                                    <textarea
+                                                        rows={5}
+                                                        className="p-3 rounded-3xl border-gray-400 border-2 outline-none focus-within:border-blue-400"
+                                                        placeholder="Overview . . ."
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </DialogContent>
                             </Dialog>
                         </div>
