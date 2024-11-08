@@ -14,7 +14,12 @@ const DialogContent: React.FC<DialogContentProps> = ({ className, children }) =>
     const { setIsDisplayContent } = context;
 
     return (
-        <div className={cn('px-2 py-1', className)}>
+        <div
+            className={cn(
+                'min-w-[450px] min-h-80 px-2 py-1 bg-white rounded-2xl duration-100 animate-scaleUp',
+                className,
+            )}
+        >
             <div className="flex flex-row-reverse py-2">
                 <CloseIcon onClick={() => setIsDisplayContent(false)} />
             </div>

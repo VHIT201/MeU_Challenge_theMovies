@@ -24,7 +24,7 @@ const Dialog: React.FC<DialogProps> = ({ children }) => {
         <DialogContext.Provider value={{ isDisplayContent, setIsDisplayContent }}>
             <div onClick={() => setIsDisplayContent(true)}>{triggerElement}</div>
             {isDisplayContent && (
-                <div className="fixed bg-black/50 z-20" style={{ height: '100vh', width: '100vw' }}>
+                <div className="w-screen h-screen fixed top-0 left-0 bg-black/50 z-50">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">{contentElement}</div>
                 </div>
             )}

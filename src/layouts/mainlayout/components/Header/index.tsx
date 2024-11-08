@@ -13,12 +13,12 @@ import {
     HeartIcon,
     LogOutIcon,
     MoonIcon,
+    NumericUpIcon,
     Popover,
     PopoverContent,
-    QuestionIcon,
-    SettingIcon,
     SunIcon,
     Switch,
+    UserIcon,
 } from '@/components';
 
 // Component
@@ -72,7 +72,7 @@ const Header: React.FC = () => {
             className={cn(
                 isDarkMode && 'dark',
                 'px-8 flex justify-center fixed top-0 w-full z-50 transition-all duration-200 ease-in-out text-black dark:text-white',
-                isScrolled ? 'py-4 bg-white dark:bg-black-main' : 'py-0 md:py-8 bg-transparent',
+                isScrolled ? 'py-4 bg-white dark:bg-black-main' : 'py-0 md:py-8 bg-white/40 dark:bg-transparent',
             )}
         >
             <div className="max-w-screen-2xl flex justify-between items-center w-full">
@@ -100,24 +100,23 @@ const Header: React.FC = () => {
                                 <PopoverContent position="bottom">
                                     <div className="w-64 bg-white rounded-md shadow-lg">
                                         <NavLink
-                                            to="/settings"
+                                            to="/profile"
                                             className="flex items-center px-4 py-3 text-gray-800 rounded-t-md hover:bg-gray-100"
                                         >
                                             <div className="w-5 h-5 mr-3 text-gray-600">
-                                                <SettingIcon width="20px" height="20px" />
+                                                <UserIcon width="20px" height="20px" />
                                             </div>
-                                            Settings & Privacy
+                                            Profile
                                         </NavLink>
                                         <NavLink
-                                            to="/help"
+                                            to="/ranking"
                                             className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-100"
                                         >
                                             <div className="w-5 h-5 mr-3 text-gray-600">
-                                                <QuestionIcon width="20px" height="20px" />
+                                                <NumericUpIcon width="20px" height="20px" />
                                             </div>
-                                            Help & Support
+                                            Ranking
                                         </NavLink>
-
                                         <NavLink
                                             to="/favorite"
                                             className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-100"
