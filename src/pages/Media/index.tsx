@@ -5,7 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 // App
-import { FeatureType, MediaType } from '@/types/media';
+import { FeatureType, MediaType } from '@/types/media/media';
 import { getFilmList } from '@/services/media';
 import { SearchForm, Spinner } from '@/components';
 

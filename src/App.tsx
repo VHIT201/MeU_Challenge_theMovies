@@ -17,7 +17,7 @@ import {
     RankingPage,
     ProfilePage,
 } from './pages';
-import { MediaType } from './types/media';
+import { MediaType } from './types/media/media';
 import { MainLayout } from './layouts';
 import { NotFound404, Spinner } from './components';
 

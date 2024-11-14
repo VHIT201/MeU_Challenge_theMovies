@@ -3,7 +3,7 @@ import React from 'react';
 
 // App
 import 'react-loading-skeleton/dist/skeleton.css';
-import { FilmResponseType } from '@/types/media';
+import { FilmResponseType } from '@/types/media/media';
 import { Carousel, FilmItem } from '@/components';
 import { cn } from '@/utils';
 import useThemeStore from '@/store/themeStore';

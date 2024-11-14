@@ -1,4 +1,4 @@
-import { FavoriteFilm, MediaType } from '@/types/media';
+import { FavoriteFilm, MediaType } from '@/types/media/media';
 import { InfiniteData, InfiniteQueryObserverResult } from '@tanstack/react-query';
 
 export interface FavoriteListProps {

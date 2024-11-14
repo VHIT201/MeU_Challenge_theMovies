@@ -7,7 +7,7 @@ import { useFavoriteStore } from '@/store/favoriteStore';
 
 // App
 import Config from '@/configuration';
-import { FeatureType, MediaType } from '@/types/media';
+import { FeatureType, MediaType } from '@/types/media/media';
 import { Carousel, FilmSlide } from '@/components';
 
 // Internal

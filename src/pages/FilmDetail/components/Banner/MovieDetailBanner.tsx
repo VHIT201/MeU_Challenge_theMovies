@@ -4,7 +4,7 @@ import React from 'react';
 // App
 import { Images } from '@/assets/images';
 import Config from '@/configuration';
-import { Credits, FilmDetails } from '@/types/media';
+import { Credits, FilmDetails } from '@/types/media/media';
 
 // Components
 const MovieDetailBanner: React.FC<{

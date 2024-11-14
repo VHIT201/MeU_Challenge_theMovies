@@ -1,5 +1,5 @@
 import { ComponentProps } from '@/types';
-import { MediaType } from '@/types/media';
+import { MediaType } from '@/types/media/media';
 
 export interface FavoriteCardProps extends ComponentProps {
     id: string;

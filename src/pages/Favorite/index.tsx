@@ -1,4 +1,4 @@
-import { MediaType } from '@/types/media';
+import { MediaType } from '@/types/media/media';
 import { useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getFavoriteMedia } from '@/services/media';

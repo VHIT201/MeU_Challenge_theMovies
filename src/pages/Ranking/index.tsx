@@ -2,7 +2,7 @@ import React from 'react';
 import { RankingBoard } from '../Favorite/components';
 import RankingBanner from './components/RankingBanner';
 import { useFilmQuery } from '../Home/hooks/useFilmQuery';
-import { FeatureType, MediaType } from '@/types/media';
+import { FeatureType, MediaType } from '@/types/media/media';
 import { Carousel } from '@/components';
 import { Images } from '@/assets/images';
 import useThemeStore from '@/store/themeStore';

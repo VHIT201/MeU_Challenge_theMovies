@@ -1,11 +1,11 @@
 //App
 import apiClient from '@/lib/http';
-import { FeatureType, FilmResponseType, FavoriteFilm, MediaType } from '@/types/media';
+import { FeatureType, FilmResponseType, MediaType } from '@/types/media/media';
 import userAxios from '@/network/userAxios';
 import { useFavoriteStore } from '@/store/favoriteStore';
 // Internal
-import { INCLUDE_ADULT, LANGUAGE_DEFAULT } from './lib/constant';
-import { User } from '@/types/user';
+import { INCLUDE_ADULT, LANGUAGE_DEFAULT } from './constant';
+import { User } from '@/types/user/user';
 
 interface MediaParams {
     keyword?: string;

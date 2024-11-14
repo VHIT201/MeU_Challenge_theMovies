@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import StackPoint from '../StackPoint';
-import { FilmType, MediaType } from '@/types/media';
+import { FilmType, MediaType } from '@/types/media/media';
 
 interface RankingBoardProps {
     filmList: Array<FilmType>;

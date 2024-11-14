@@ -1,5 +1,5 @@
 // Core
-import { Video } from '@/types/media';
+import { Video } from '@/types/media/media';
 import React from 'react';
 
 // App
