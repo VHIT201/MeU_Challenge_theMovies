@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 // App
 import { Images } from '@/assets/images';
@@ -19,6 +19,7 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media
     // Hooks
     const navigate = useNavigate();
     const { isDarkMode } = useThemeStore();
+    const [urlSearchParam] = useSearchParams();
 
     // States
     const [imageSrc, setImageSrc] = useState(poster_path ? `${Config.imgPath}${poster_path}` : Images.default_image);
@@ -31,6 +32,9 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media
     const isFilmFavorite = isFavorite(id.toString()); // Convert id to string
 
     const filmTitle = title || name;
+    const searchValue = urlSearchParam.get('query');
+    const regex = new RegExp(`(${searchValue})`, 'gi');
+    const parts = filmTitle.split(regex);
 
     // Functions
     const toggleFavorite = async (e: React.MouseEvent) => {
@@ -104,7 +108,19 @@ const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media
                         'font-medium text-left text-sm md:text-lg mt-4 transition duration-300 ease-in-out group-hover:text-red-main text-black dark:text-white ',
                     )}
                 >
-                    {filmTitle}
+                    <span>
+                        {searchValue
+                            ? parts.map((part, index) =>
+                                  part.toLowerCase() === searchValue.toLowerCase() ? (
+                                      <span key={index} style={{ color: 'red' }}>
+                                          {part}
+                                      </span>
+                                  ) : (
+                                      part
+                                  ),
+                              )
+                            : filmTitle}
+                    </span>
                 </h3>
             </div>
         </div>

@@ -61,7 +61,7 @@ const ProfileInfo = () => {
                         </div>
                     </div>
                     <div className="min-w-[500px] flex items-center space-x-2">
-                        <div className="flex justify-center items-center">
+                        <div className="flex justify-center items-center space-x-4">
                             <div className="w-16 h-16 flex justify-center items-center p-4 text-lg font-bold rounded-full bg-gray-300 dark:bg-[#333333]">
                                 <p className='relative text-black dark:text-white after:content-["%"] after:absolute after:-top-2 after:-right-2 after:text-[10px]'>
                                     56
@@ -69,7 +69,7 @@ const ProfileInfo = () => {
                             </div>
                             <div className="text-xl text-black dark:text-white font-semibold">Average Movie Score</div>
                         </div>
-                        <div className="flex justify-center items-center">
+                        <div className="flex justify-center items-center space-x-4">
                             <div className="w-16 h-16 flex justify-center items-center p-4 text-lg font-bold rounded-full bg-gray-300 dark:bg-[#333333]">
                                 <p className='relative text-black dark:text-white after:content-["%"] after:absolute after:-top-2 after:-right-2 after:text-[10px]'>
                                     0

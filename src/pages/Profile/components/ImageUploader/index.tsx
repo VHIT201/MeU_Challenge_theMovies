@@ -20,10 +20,10 @@ const ImageUploader = () => {
         <div>
             <img
                 src={imageSrc ?? Images.noImage}
-                className="min-h-[200px] max-h-[200px] h-full w-[200px] mt-4 rounded-3xl"
+                className="min-h-[200px] max-h-[200px] h-full w-[200px] mt-4 rounded-md"
             />
             <input
-                className="w-full mt-2 rounded-lg border-none outline-none text-white bg-blue-400"
+                className="w-full mt-2 rounded-md border-none outline-none text-white bg-blue-400"
                 type="file"
                 placeholder="Change"
                 onChange={handleFileChange}

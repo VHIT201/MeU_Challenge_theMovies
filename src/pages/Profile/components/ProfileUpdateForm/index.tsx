@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { schemaForm } from './schema';
 import { z } from 'zod';
+import { TextAreaField, TextField } from '@/components';
 
 type FormFields = z.infer<typeof schemaForm>;
 
@@ -26,21 +27,12 @@ const ProfileUpdateForm = () => {
             <div className="flex items-center space-x-4">
                 <ImageUploader />
                 <div className="flex-1 w-full md:min-w-[400px]">
-                    <div className="flex flex-col my-4">
-                        <input
-                            {...register('username')}
-                            className="p-3 rounded-3xl border-gray-400 border-2 outline-none focus-within:border-blue-400"
-                            placeholder="Username"
-                        />
-                        {errors.username && (
-                            <span className="px-3 text-lg text-red-500">{errors.username.message}</span>
-                        )}
-                    </div>
+                    <TextField label="Username" error={errors.username?.message} {...register('username')} />
                     <div className="flex flex-col my-4">
                         <textarea
                             {...register('overview')}
                             rows={5}
-                            className="p-3 rounded-3xl border-gray-400 border-2 outline-none focus-within:border-blue-400"
+                            className="p-3 rounded-md border-gray-400 border-[1px] outline-none focus-within:border-blue-400"
                             placeholder="Overview . . ."
                         />
                     </div>

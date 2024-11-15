@@ -21,7 +21,7 @@ const DialogContent: React.FC<DialogContentProps> = ({ className, children }) =>
             )}
         >
             <div className="flex flex-row-reverse py-2">
-                <CloseIcon onClick={() => setIsDisplayContent(false)} />
+                <CloseIcon className="cursor-pointer hover:text-gray-400" onClick={() => setIsDisplayContent(false)} />
             </div>
             <div>{children}</div>
         </div>

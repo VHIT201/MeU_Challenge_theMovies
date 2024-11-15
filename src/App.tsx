@@ -29,10 +29,11 @@ function App() {
             element: <AuthenticatePage />,
         },
         {
+            path: '/',
             element: <MainLayout />,
             children: [
                 {
-                    path: '/',
+                    index: true,
                     element: <HomePage />,
                 },
                 {

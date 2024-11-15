@@ -6,6 +6,8 @@ export { default as SearchForm } from './SearchForm';
 export { default as Spinner } from './Spinner';
 export { default as Popover } from './Popover';
 export { default as Switch } from './Switch';
+export { default as TextField } from './TextField';
+export { default as TextAreaField } from './TextAreaField';
 export { PopoverContent } from './Popover';
 export * from './Icon';
 export * from './Error';
