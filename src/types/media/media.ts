@@ -68,6 +68,7 @@ export interface FilmDetails {
     genres?: Genre[];
     homepage?: string;
     id: number;
+    name?: string;
     imdb_id?: string;
     origin_country?: string[];
     original_language?: string;
@@ -82,6 +83,7 @@ export interface FilmDetails {
     runtime?: number;
     spoken_languages?: Language[];
     status?: string;
+    original_name?: string;
     tagline?: string;
     title?: string;
     video?: boolean;
