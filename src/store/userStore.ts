@@ -1,10 +1,6 @@
-import { create } from 'zustand';
-<<<<<<< HEAD
 import { User } from '@/types/user/user';
-=======
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User } from '@/types/user';
->>>>>>> 36fd01c7d155d4491deb1d7fd2ec4727e6c805c6
 
 interface UserStoreState {
     userInfo: User | null;
