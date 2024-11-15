@@ -1,41 +1,26 @@
 import { MediaType } from '@/types/media/media';
 import { useSearchParams } from 'react-router-dom';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { getFavoriteMedia } from '@/services/media';
-import { useCallback, useState } from 'react';
-import { ArrowDownUpIcon, Button, Popover, PopoverContent, SearchForm } from '@/components';
-import FavoriteFilmList from './components/FavoriteFilmList';
+import { useCallback, useState, useEffect } from 'react';
+import { ArrowDownUpIcon, Button, FilmItem, Popover, PopoverContent, SearchForm } from '@/components';
+import { getFilmDetail } from '@/services/media';
 import { cn } from '@/utils';
 import useThemeStore from '@/store/themeStore';
+import { useFavoriteStore } from '@/store/favoriteStore';
 
 const FavoriteListPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const searchTerm = searchParams.get('query') || '';
     const { isDarkMode } = useThemeStore();
-
+    const favouriteList = useFavoriteStore.getState().favoriteList;
+    // Retrieve lists directly from the store using Zustand's selector
+    const movieFavoriteList = useFavoriteStore((state) => state.movieFavoriteList);
+    const tvFavoriteList = useFavoriteStore((state) => state.tvFavoriteList);
+    console.log('movieFavoriteList', movieFavoriteList);
+    console.log('tvFavoriteList', tvFavoriteList);
     // States
     const [mediaType, setMediaType] = useState<MediaType>(MediaType.Movie);
 
-    const {
-        data: filmList,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-    } = useInfiniteQuery({
-        queryKey: ['film', 'favorite', mediaType],
-        queryFn: async ({ pageParam = 1 }) => {
-            const response = await getFavoriteMedia(mediaType, pageParam);
-
-            return response ?? [];
-        },
-        getNextPageParam: (lastPage, pages) => {
-            if (lastPage && lastPage.length < 20) {
-                return undefined;
-            }
-            return pages.length + 1;
-        },
-        initialPageParam: 1,
-    });
+    // Lấy danh sách yêu thích theo mediaType
 
     const handleSearch = useCallback(
         (keyword: string) => {
@@ -44,8 +29,13 @@ const FavoriteListPage = () => {
         },
         [setSearchParams],
     );
+    const fetchBatchDetails = useFavoriteStore((state) => state.fetchBatchDetails);
 
-    const pageTitle = mediaType === MediaType.Movie ? 'Movies' : 'TVSeries';
+    useEffect(() => {
+        fetchBatchDetails();
+    }, [fetchBatchDetails]);
+
+    const pageTitle = mediaType === MediaType.Movie ? 'Movies' : 'TV Series';
 
     return (
         <main className="w-full bg-black-main">
@@ -70,7 +60,7 @@ const FavoriteListPage = () => {
                     <Popover>
                         <Button
                             className="rounded-2xl"
-                            text="Movie"
+                            text={mediaType === MediaType.Movie ? 'Movie' : 'TV'}
                             type="primary"
                             size="lg"
                             icon={<ArrowDownUpIcon className="mr-4 font-bold" width="20px" height="20px" />}
@@ -96,19 +86,25 @@ const FavoriteListPage = () => {
                         </PopoverContent>
                     </Popover>
                 </div>
-                {filmList ? (
-                    <FavoriteFilmList
-                        filmList={filmList}
-                        mediaType={mediaType}
-                        isFetchingNextPage={isFetchingNextPage}
-                        hasNextPage={hasNextPage}
-                        fetchNextPage={fetchNextPage}
-                    />
-                ) : (
-                    <h1 className={cn(isDarkMode && 'dark', 'py-4 text-4xl text-black dark:text-white font-bold')}>
-                        No Favorite {pageTitle}
-                    </h1>
-                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-16">
+                    {favouriteList.length > 0 ? (
+                        (mediaType == MediaType.Movie ? movieFavoriteList : tvFavoriteList).map((item) => (
+                            <FilmItem
+                                key={item.id}
+                                id={item.id}
+                                name={item.title || item.original_title || item.name || item.original_name || ''}
+                                title={item.title || item.original_title || ''}
+                                media_type={mediaType}
+                                poster_path={item.poster_path || ''}
+                                className="w-full"
+                            />
+                        ))
+                    ) : (
+                        <h1 className={cn(isDarkMode && 'dark', 'py-4 text-4xl text-black dark:text-white font-bold')}>
+                            No Favorite {pageTitle}
+                        </h1>
+                    )}
+                </div>
             </div>
         </main>
     );

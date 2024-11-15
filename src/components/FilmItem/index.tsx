@@ -15,7 +15,7 @@ import useThemeStore from '@/store/themeStore';
 import { getFavoriteMedia } from '@/services/media';
 
 // Component
-const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media_type, className }) => {
+const FilmItem: React.FC<FilmItemProps> = ({ id, title, name, poster_path, media_type, className, mediaId }) => {
     // Hooks
     const navigate = useNavigate();
     const { isDarkMode } = useThemeStore();
