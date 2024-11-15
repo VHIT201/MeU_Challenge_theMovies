@@ -1,9 +1,9 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as Components from '../components/components';
 import userAxios from '@/network/userAxios';
 
+// Schema definition using zod
 const schemaForm = z
     .object({
         username: z.string().min(1, { message: 'Username is required' }),
@@ -56,33 +56,45 @@ const SignUpForm = () => {
         }
     };
 
+    // Function to capitalize the first letter of each word
+    const capitalizePlaceholder = (text: string) => text.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase());
+
     return (
-        <Components.Form onSubmit={handleSubmit(handleSignUp)}>
-            <Components.Title>Create Account</Components.Title>
-            <Components.Input type="text" {...register('username')} placeholder="Username" />
-            {errors.username && (
-                <span className="mb-2 text-md text-red-main font-semibold">{errors.username.message}</span>
-            )}
-            <Components.Input type="email" {...register('email')} placeholder="Email" />
-            {errors.email && <span className="mb-2 text-md text-red-main font-semibold">{errors.email.message}</span>}
-            <Components.Input type="text" {...register('firstName')} placeholder="First Name" />
-            {errors.firstName && (
-                <span className="mb-2 text-md text-red-main font-semibold">{errors.firstName.message}</span>
-            )}
-            <Components.Input type="text" {...register('lastName')} placeholder="Last Name" />
-            {errors.lastName && (
-                <span className="mb-2 text-md text-red-main font-semibold">{errors.lastName.message}</span>
-            )}
-            <Components.Input type="password" {...register('password')} placeholder="Password" />
-            {errors.password && (
-                <span className="mb-2 text-md text-red-main font-semibold">{errors.password.message}</span>
-            )}
-            <Components.Input type="password" {...register('confirmPassword')} placeholder="Confirm Password" />
-            {errors.confirmPassword && (
-                <span className="mb-2 text-md text-red-main font-semibold">{errors.confirmPassword.message}</span>
-            )}
-            <Components.Button disabled={isSubmitting}>{isSubmitting ? 'Loading . . .' : 'Sign Up'}</Components.Button>
-        </Components.Form>
+        <form
+            onSubmit={handleSubmit(handleSignUp)}
+            className="relative flex h-full flex-col gap-6 p-8 w-full max-w-md mx-auto bg-gray-900 shadow-lg items-center justify-center"
+        >
+            <h1 className="text-2xl font-bold text-white text-center">Create Account</h1>
+
+            {['username', 'email', 'firstName', 'lastName', 'password', 'confirmPassword'].map((field, idx) => (
+                <div key={idx} className="w-full flex flex-col gap-1 relative">
+                    <label className="block text-gray-400 mb-1 capitalize text-left pl-2 w-full">
+                        {capitalizePlaceholder(field.replace('confirmPassword', 'Confirm Password'))}
+                    </label>
+                    <input
+                        type={field.includes('password') ? 'password' : 'text'}
+                        {...register(field as keyof FormFields)}
+                        placeholder={capitalizePlaceholder(
+                            field.replace('confirmPassword', 'Confirm Password').replace(/([A-Z])/g, ' $1'),
+                        )}
+                        className="w-full bg-gray-800 text-gray-200 px-4 py-3 rounded-full border border-gray-600 focus:border-red-500 outline-none"
+                    />
+                    {errors[field as keyof FormFields] && (
+                        <span className="absolute top-full left-2 mt-1 text-xs text-red-400">
+                            {errors[field as keyof FormFields]?.message}
+                        </span>
+                    )}
+                </div>
+            ))}
+
+            <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full p-3 rounded-full bg-red-500 text-white font-bold hover:bg-red-600 transition disabled:bg-gray-600"
+            >
+                {isSubmitting ? 'Loading...' : 'Sign Up'}
+            </button>
+        </form>
     );
 };
 

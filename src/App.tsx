@@ -29,14 +29,15 @@ function App() {
             element: <AuthenticatePage />,
         },
         {
+            path: '/',
             element: <MainLayout />,
             children: [
                 {
-                    path: '/',
+                    path: '',
                     element: <HomePage />,
                 },
                 {
-                    path: '/:media_type',
+                    path: ':media_type',
                     element: <MediaPage />,
                     loader: async ({ params }) => {
                         if (params.media_type !== MediaType.Movie && params.media_type !== MediaType.TV) {
@@ -47,7 +48,7 @@ function App() {
                     },
                 },
                 {
-                    path: '/:media_type/:id',
+                    path: ':media_type/:id',
                     element: <FilmDetailPage />,
                     loader: async ({ params }) => {
                         if (params.media_type !== MediaType.Movie && params.media_type !== MediaType.TV) {
@@ -57,15 +58,15 @@ function App() {
                     },
                 },
                 {
-                    path: '/favorite',
+                    path: 'favorite',
                     element: <FavoriteListPage />,
                 },
                 {
-                    path: '/ranking',
+                    path: 'ranking',
                     element: <RankingPage />,
                 },
                 {
-                    path: '/profile',
+                    path: 'profile',
                     element: <ProfilePage />,
                 },
             ],

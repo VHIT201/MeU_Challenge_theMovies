@@ -105,7 +105,6 @@ export const getCreditList = async (urlBase: string) => {
 export const getFavoriteMedia = async (userInfo: User) => {
     try {
         const response = await userAxios.get(`/favoritefilm/getfavoritefilmbyuserid?id=${userInfo.id}`);
-        console.log('Đây là favorite media : ', response);
 
         const favoriteItems = response.data.data.map((item: { id: string; movieid: string; media_type: string }) => ({
             id: item.movieid,
