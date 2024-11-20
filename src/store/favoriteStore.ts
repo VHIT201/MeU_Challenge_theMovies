@@ -19,6 +19,7 @@ type FavoriteStore = {
     removeFavorite: (mediaId: string) => void;
     isFavorite: (mediaId: string) => boolean;
     fetchBatchDetails: () => Promise<void>;
+    clearFavorites: () => void; // Thêm hàm clearFavorites
 };
 
 export const useFavoriteStore = create<FavoriteStore>()(
@@ -106,6 +107,17 @@ export const useFavoriteStore = create<FavoriteStore>()(
                     movieFavoriteList: uniqueMovieDetails,
                     tvFavoriteList: uniqueTvDetails,
                 });
+            },
+
+            // Hàm clearFavorites để xóa toàn bộ dữ liệu persist
+            clearFavorites: () => {
+                set({
+                    favoriteList: [],
+                    dataFavoriteList: [],
+                    movieFavoriteList: [],
+                    tvFavoriteList: [],
+                });
+                localStorage.removeItem('favorite-storage');
             },
         }),
         {

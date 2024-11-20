@@ -23,7 +23,7 @@ import {
 
 // Component
 const NavigationLinks = () => (
-    <div className="fixed md:relative left-0 md:left-auto right-0 md:right-auto bottom-0 md:bottom-auto flex items-center justify-evenly bg-black-main md:bg-transparent py-2 md:py-4 -mx-4">
+    <div className="relative left-0 md:left-auto right-0 md:right-auto bottom-0 md:bottom-auto flex items-center justify-evenly bg-black-main md:bg-transparent py-2 md:py-4 -mx-4">
         <div className="px-4">
             <NavLink className="nav-item text-black dark:text-white" to="/" end>
                 Home
@@ -47,7 +47,7 @@ const Header: React.FC = () => {
     // State
     const [isScrolled, setIsScrolled] = useState(false);
     const { isDarkMode } = useThemeStore();
-    const { userInfo, clearUserInfo } = useUserStore(); // Lấy thông tin từ store Zustand
+    const { userInfo, clearUserInfo } = useUserStore();
 
     // Effects
     useEffect(() => {
@@ -71,8 +71,8 @@ const Header: React.FC = () => {
         <div
             className={cn(
                 isDarkMode && 'dark',
-                'px-8 flex justify-center fixed top-0 w-full z-50 transition-all duration-200 ease-in-out text-black dark:text-white',
-                isScrolled ? 'py-4 bg-white dark:bg-black-main' : 'py-0 md:py-8 bg-white/40 dark:bg-transparent',
+                'px-8 flex justify-center w-full z-50 transition-all duration-200 ease-in-out text-black dark:text-white',
+                isScrolled ? 'fixed py-4 bg-white dark:bg-black-main' : 'py-0 md:py-8 bg-white dark:bg-transparent',
             )}
         >
             <div className="max-w-screen-2xl flex justify-between items-center w-full">

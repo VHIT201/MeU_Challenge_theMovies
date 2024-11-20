@@ -18,17 +18,17 @@ const ReviewAnalytic: React.FC<ReviewAnalyticProps> = ({ data }) => {
     }, [data]);
 
     return (
-        <div className="container px-16 md:px-32">
-            <h1 className="mb-8 text-left text-4xl text-white font-semibold">Analytic Review :</h1>
+        <div className="container">
+            <h1 className="mb-8 text-left text-4xl dark:text-white font-semibold">Analytic Review :</h1>
             <div className="w-full h-[400px]">
                 <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={analyticData}>
-                        <XAxis dataKey="name" className="text-white" />
-                        <YAxis />
+                        <XAxis dataKey="name" className="text-black dark:text-white" />
+                        <YAxis className="text-black dark:text-white" />
                         <Tooltip />
                         <Legend />
                         <Bar dataKey="star" barSize={50} fill="rgb(229, 9, 20)" />
-                        <Line type="monotone" dataKey="star" stroke="#fff" strokeWidth={2} />
+                        <Line type="monotone" dataKey="star" strokeWidth={2} />
                     </ComposedChart>
                 </ResponsiveContainer>
             </div>

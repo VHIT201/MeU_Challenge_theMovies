@@ -14,8 +14,12 @@ import { analyticCommentList, getCommentList } from '@/services/review';
 import { MediaType } from '@/types/media/media';
 import CommentList from './components/CommentList';
 import ReviewAnalytic from './components/ReviewAnalytic';
+import useThemeStore from '@/store/themeStore';
+import { cn } from '@/utils';
 
 const FilmDetailPage: React.FC = () => {
+    const { isDarkMode } = useThemeStore();
+
     const { id, media_type } = useParams<{ id: string; media_type: string }>();
     const urlBase = `${media_type}/${id}`;
     const mediaType = media_type === MediaType.Movie ? MediaType.Movie : MediaType.TV;
@@ -76,12 +80,19 @@ const FilmDetailPage: React.FC = () => {
     const error = filmDetailsError || videosError || similarFilmsError || creditsError;
 
     if (!id || !media_type) return <div>Movie information not available.</div>;
-    if (loading) return <div className="spinner" aria-label="Loading..." />;
+    if (loading)
+        return (
+            <div className="h-screen w-screen flex justify-center items-center">
+                <div className="spinner" aria-label="Loading..." />
+            </div>
+        );
     if (error) return <div>Error loading movie details.</div>;
     if (!filmDetails) return <div>No details available</div>;
 
     return (
-        <main className="w-full flex flex-col items-center bg-black">
+        <main
+            className={cn(isDarkMode && 'dark', 'w-full flex flex-col items-center bg-white-main dark:bg-black-main')}
+        >
             <MovieDetailBanner filmDetails={filmDetails} credits={credits} />
             <MovieDetailVideoSection videos={videos || []} />
             {analyticData && <ReviewAnalytic data={analyticData} />}

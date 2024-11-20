@@ -23,7 +23,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ author, authorDetail, content
     };
 
     return (
-        <div className="w-full flex gap-4 p-3 text-left text-white rounded-2xl bg-black-main shadow-sm transition-all duration-150">
+        <div className="w-full flex gap-4 p-3 text-left dark:text-white rounded-2xl bg-[#e6e6e6] dark:bg-[#1a1a1a] shadow-sm transition-all duration-150">
             <div>
                 <img
                     className="w-10 h-10 rounded-full"
@@ -37,7 +37,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ author, authorDetail, content
                         <h3 className="text-lg font-medium">{author}</h3>
                         <div className="flex items-center space-x-2">
                             <StarIcon className="text-red-500" width="20px" height="20px" />
-                            <p className="text-white font-semibold">{authorDetail.rating}</p>
+                            <p className="dark:text-white font-semibold">{authorDetail.rating}</p>
                         </div>
                     </div>
                     <span className="text-gray-400">{createdAt}</span>

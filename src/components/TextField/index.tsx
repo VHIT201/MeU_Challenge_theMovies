@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { cn } from '@/utils';
 import { TextFieldProps } from './lib/types';
 import { textFieldVariants } from './lib/constants';
+import { capitalizePlaceholder } from '@/helper';
 
 // Component
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
@@ -36,7 +37,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
         // Template
         return (
-            <div>
+            <div className="bg-transparent">
                 <div className={cn(textFieldVariants({ sizeInput, className }), 'box-content relative')}>
                     <label
                         className={cn(
@@ -47,13 +48,13 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                             error && 'text-red-500',
                         )}
                     >
-                        {label}
+                        {capitalizePlaceholder(label)}
                     </label>
                     <div className="absolute inset-0">
                         <input
                             {...field}
                             ref={ref}
-                            className="w-full h-full px-4 border-none outline-none"
+                            className="w-full h-full bg-transparent px-4 border-none outline-none"
                             type="text"
                             value={textFieldValue}
                             onChange={handleChanged}

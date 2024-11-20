@@ -10,8 +10,8 @@ const CommentList: React.FC<CommentListProps> = ({ commentList, isFetchingNextPa
 
     console.log(commentList);
     return (
-        <div>
-            <h1 className="px-16 md:px-32 my-8 text-4xl text-white font-semibold">Comments : </h1>
+        <div className="container">
+            <h1 className="my-8 text-4xl dark:text-white font-semibold">Comments : </h1>
             <div className="flex flex-col px-8 md:px-32 space-y-8">
                 {commentItemList.map((commentItem) => (
                     <CommentItem
